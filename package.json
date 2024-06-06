@@ -1,0 +1,22 @@
+{
+    "name": "serverless-typescript-starter",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "sls offline",
+        "check": "biome check .",
+        "fix": "biome check --apply ."
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.7.3",
+        "prisma": "^5.14.0",
+        "serverless": "^3.38.0",
+        "serverless-esbuild": "^1.52.1",
+        "serverless-offline": "^13.5.1"
+    },
+    "engines": {
+        "node": "20.x"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.14.0"
+    }
+}
