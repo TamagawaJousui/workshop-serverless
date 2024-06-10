@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,50 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model participations {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String    @db.Uuid
+  workshop_id      String    @db.Uuid
+  participation_at DateTime  @db.Timestamp(6)
+  canceled_at      DateTime? @db.Timestamp(6)
+  users            users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workshops        workshops @relation(fields: [workshop_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model reviews {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String    @db.Uuid
+  workshop_id String    @db.Uuid
+  content     String    @db.VarChar
+  reviewed_at DateTime  @db.Timestamp(6)
+  deleted_at  DateTime? @db.Timestamp(6)
+  users       users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workshops   workshops @relation(fields: [workshop_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id                          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                        String           @db.VarChar
+  email                       String           @unique @db.VarChar
+  hashed_password             String           @db.VarChar
+  hashed_temporary_api_key    String?          @db.VarChar
+  expired_at                  DateTime?        @db.Timestamp(6)
+  participations              participations[]
+  reviews                     reviews[]
+}
+
+model workshops {
+  id                       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  start_at                 DateTime         @db.Timestamp(6)
+  end_at                   DateTime         @db.Timestamp(6)
+  participation_method     String           @db.VarChar
+  content                  String?          @default("") @db.VarChar
+  preparation              String?          @default("") @db.VarChar
+  materials                String?          @default("") @db.VarChar
+  canceled_at              DateTime?        @db.Timestamp(6)
+  yumex_point_processed_at DateTime?        @db.Timestamp(6)
+  participations           participations[]
+  reviews                  reviews[]
 }

@@ -11,7 +11,23 @@
     "linter": {
         "enabled": true,
         "rules": {
-            "recommended": true
+            "recommended": true,
+            "style": {
+                "useNamingConvention": {
+                    "level": "error",
+                    "options": {
+                        "conventions": [
+                            {
+                                "selector": {
+                                    "kind": "objectLiteralProperty",
+                                    "scope": "any"
+                                },
+                                "match": "[a-zA-Z_].*"
+                            }
+                        ]
+                    }
+                }
+            }
         }
     },
     "files": {

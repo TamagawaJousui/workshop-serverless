@@ -1,5 +1,5 @@
 service: serverless-typescript-starter
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -9,9 +9,24 @@ functions:
   hello:
     handler: src/hello.handler
     events:
-      - httpApi:
+      - http:
           path: /hello
           method: get
+  usersRegister:
+    handler: src/users/register.handler
+    events:
+      - http:
+          path: /users/register
+          method: post
+          request:
+            schemas:
+              application/json: ${file(./src/models/user_register.json)}
+  usersRuth:
+    handler: src/users/auth.handler
+    events:
+      - http:
+          path: /users/auth
+          method: post
 
 plugins:
   - serverless-esbuild

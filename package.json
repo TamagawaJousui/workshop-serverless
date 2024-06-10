@@ -7,7 +7,7 @@
         "fix": "biome check --apply ."
     },
     "devDependencies": {
-        "@biomejs/biome": "^1.7.3",
+        "@biomejs/biome": "^1.8.0",
         "prisma": "^5.14.0",
         "serverless": "^3.38.0",
         "serverless-esbuild": "^1.52.1",
@@ -17,6 +17,9 @@
         "node": "20.x"
     },
     "dependencies": {
-        "@prisma/client": "^5.14.0"
+        "@prisma/client": "^5.14.0",
+        "@types/bcryptjs": "^2.4.6",
+        "@types/node": "^20.14.2",
+        "bcryptjs": "^2.4.3"
     }
 }
