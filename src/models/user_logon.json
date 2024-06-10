@@ -2,12 +2,9 @@
     "definitions": {},
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-    "title": "user rigister",
-    "required": ["name", "email", "password"],
+    "title": "user logon",
+    "required": ["email", "password"],
     "properties": {
-        "name": {
-            "type": "string"
-        },
         "email": {
             "type": "string"
         },

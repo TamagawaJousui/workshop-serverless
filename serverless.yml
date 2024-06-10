@@ -27,6 +27,9 @@ functions:
       - http:
           path: /users/auth
           method: post
+          request:
+            schemas:
+              application/json: ${file(./src/models/user_logon.json)}
 
 plugins:
   - serverless-esbuild
