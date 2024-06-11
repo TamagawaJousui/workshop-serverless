@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { hashSync } from "bcryptjs";
 import {
+    GENERAL_SERVER_ERROR,
+    PRISMA_ERROR_CODE,
     SALT_ROUNDS,
     SUCCESS_RESULT,
-    PRISMA_ERROR_CODE,
     USER_EMAIL_DUPLICATED,
-    GENERAL_SERVER_ERROR,
 } from "../constants";
 
 const prisma = new PrismaClient();
@@ -24,7 +24,8 @@ async function createUser(user: UserRegisterReqEntity) {
         email: user.email,
         hashed_password: hashedPassword,
     };
-    await prisma.users.create({ data: UserCreatedEntity });
+    const result = await prisma.users.create({ data: UserCreatedEntity });
+    return result;
 }
 
 export async function handler(request) {
@@ -32,7 +33,7 @@ export async function handler(request) {
     const result = await createUser(userReq).catch((err) => {
         return err;
     });
-    if (!result) {
+    if (result?.name === userReq.name && result?.email === userReq.email) {
         return SUCCESS_RESULT;
     }
     if (result.code === PRISMA_ERROR_CODE.P2002) {

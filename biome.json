@@ -23,6 +23,13 @@
                                     "scope": "any"
                                 },
                                 "match": "[a-zA-Z_].*"
+                            },
+                            {
+                                "selector": {
+                                    "kind": "typeProperty",
+                                    "scope": "any"
+                                },
+                                "match": "[a-zA-Z_].*"
                             }
                         ]
                     }

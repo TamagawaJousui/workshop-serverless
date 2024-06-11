@@ -12,7 +12,7 @@ functions:
       - http:
           path: /hello
           method: get
-  usersRegister:
+  userRegister:
     handler: src/users/register.handler
     events:
       - http:
@@ -21,7 +21,7 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/user_register.json)}
-  usersRuth:
+  userRuth:
     handler: src/users/auth.handler
     events:
       - http:
@@ -30,6 +30,15 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/user_logon.json)}
+  workshopCreate:
+    handler: src/workshops/create.handler
+    events:
+      - http:
+          path: /workshops/
+          method: post
+          request:
+            schemas:
+              application/json: ${file(./src/models/workshop_create.json)}
 
 plugins:
   - serverless-esbuild

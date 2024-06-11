@@ -2,11 +2,11 @@ import crypto from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { compareSync, hashSync } from "bcryptjs";
 import {
+    API_KEY_LIFETIME,
+    GENERAL_SERVER_ERROR,
     SALT_ROUNDS,
     USER_NOT_EXISTS,
     USER_PASSWORD_INCORRECT,
-    API_KEY_LIFETIME,
-    GENERAL_SERVER_ERROR,
 } from "../constants";
 
 const prisma = new PrismaClient();

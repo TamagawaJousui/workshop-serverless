@@ -1,0 +1,30 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "user logon",
+    "required": ["start_at", "end_at", "participation_method"],
+    "properties": {
+        "start_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "end_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "participation_method": {
+            "type": "string"
+        },
+        "content": {
+            "type": "string"
+        },
+        "preparation": {
+            "type": "string"
+        },
+        "materials": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}
