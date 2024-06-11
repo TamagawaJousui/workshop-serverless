@@ -3,7 +3,6 @@ import {
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
     WORKSHOP_UUID_FORMAT_INCORRECT,
-    isError,
     WORKSHOP_UUID_NOT_EXISTS,
 } from "../constants";
 import type { UUID } from "node:crypto";

@@ -11,6 +11,7 @@ export const SUCCESS_RESULT = {
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
     P2023: "P2023",
+    P2025: "P2025",
 };
 
 export const USER_EMAIL_DUPLICATED = {
@@ -82,6 +83,33 @@ export const WORKSHOP_UUID_NOT_EXISTS = {
     statusCode: 400,
     body: JSON.stringify({
         errorMessage: "勉強会のUUIDの存在しません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
+export const WORKSHOP_PARTICIPANT_DUPLICATED = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "ユーザーはすでにこの勉強会に参加登録済みです",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
+export const WORKSHOP_PARTICIPANT_NOT_EXISTS = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "ユーザーはすでにこの勉強会に参加していません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
+export const WORKSHOP_PARTICIPANT_ALREADY_CANCELED = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "ユーザーはすでにこの勉強会の参加登録はキャセル済みです",
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },

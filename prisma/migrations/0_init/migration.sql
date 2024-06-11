@@ -49,6 +49,9 @@ CREATE TABLE "workshops" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "participations_user_id_workshop_id_key" ON "participations"("user_id", "workshop_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
@@ -62,3 +65,4 @@ ALTER TABLE "reviews" ADD CONSTRAINT "reviews_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_workshop_id_fkey" FOREIGN KEY ("workshop_id") REFERENCES "workshops"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+

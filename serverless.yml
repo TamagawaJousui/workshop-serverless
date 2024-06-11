@@ -74,6 +74,57 @@ functions:
                 workshop_UUID: true
             schemas:
               application/json: ${file(./src/models/workshop_create.json)}
+  workshopDelete:
+    handler: src/workshops/delete.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}
+          method: delete
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+  workshopParticipate:
+    handler: src/workshops/participate.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}/participants/{user_email}
+          method: post
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+                user_email: true
+  workshopCancelParticipate:
+    handler: src/workshops/cancelParticipate.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}/participants/{user_email}
+          method: delete
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+                user_email: true
+  workshopListParticipants:
+    handler: src/workshops/listParticipants.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}/participants/
+          method: get
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+  workshopPostReview:
+    handler: src/workshops/postReview.handler
+    events:
+      - http:
+          path: /workshops/reviews/
+          method: post
+          request:
+            schemas:
+              application/json: ${file(./src/models/review_create.json)}
 
 plugins:
   - serverless-esbuild
