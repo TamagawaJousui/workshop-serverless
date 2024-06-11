@@ -1,5 +1,7 @@
 export const SALT_ROUNDS: number = 10;
 
+export const isError = (err: unknown): err is Error => err instanceof Error;
+
 export const SUCCESS_RESULT = {
     statusCode: 200,
     body: JSON.stringify({ success: true }),
@@ -8,6 +10,7 @@ export const SUCCESS_RESULT = {
 
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
+    P2023: "P2023",
 };
 
 export const USER_EMAIL_DUPLICATED = {
@@ -64,4 +67,31 @@ export const WORKSHOP_STATUS_TYPE_INCORRECT = {
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
+};
+
+export const WORKSHOP_UUID_FORMAT_INCORRECT = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "勉強会のUUIDのフォーマットは正しくありません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
+export const WORKSHOP_UUID_NOT_EXISTS = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "勉強会のUUIDの存在しません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
+export type WorkshopCreateEntity = {
+    start_at: string;
+    end_at: string;
+    participation_method: string;
+    content?: string;
+    preparation?: string;
+    materials?: string;
 };

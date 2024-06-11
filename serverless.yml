@@ -21,7 +21,7 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/user_register.json)}
-  userRuth:
+  userAuth:
     handler: src/users/auth.handler
     events:
       - http:
@@ -30,6 +30,9 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/user_logon.json)}
+  # authorizer:
+  #   handler: src/users/authorizer.handler
+  #   events:
   workshopCreate:
     handler: src/workshops/create.handler
     events:
@@ -49,6 +52,28 @@ functions:
             parameters:
               querystrings:
                 status: false
+  workshopDetail:
+    handler: src/workshops/detail.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}
+          method: get
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+  workshopDetailEdit:
+    handler: src/workshops/edit.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}
+          method: put
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
+            schemas:
+              application/json: ${file(./src/models/workshop_create.json)}
 
 plugins:
   - serverless-esbuild
