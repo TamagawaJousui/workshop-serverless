@@ -57,6 +57,7 @@ function auth(user: UserLogonReqEntity) {
 export async function handler(request) {
     const userReq: UserLogonReqEntity = JSON.parse(request.body);
     const result = await auth(userReq).catch((err) => {
+        console.warn(err);
         return err;
     });
 

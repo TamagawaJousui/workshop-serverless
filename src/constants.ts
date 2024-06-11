@@ -47,3 +47,21 @@ export const GENERAL_SERVER_ERROR = {
 };
 
 export const API_KEY_LIFETIME = 3600 * 1000 * 24;
+
+export const PARAMETER_OF_WORKSHOR_LIST_QUERY = "status";
+
+export const WORKSHOP_STATUS_TYPE_ARRY = [
+    "all",
+    "ended",
+    "ongoing",
+    "scheduled",
+];
+
+export const WORKSHOP_STATUS_TYPE_INCORRECT = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "勉強会の種別指定は正しくありません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};

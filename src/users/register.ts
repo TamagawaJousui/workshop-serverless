@@ -31,12 +31,13 @@ async function createUser(user: UserRegisterReqEntity) {
 export async function handler(request) {
     const userReq: UserRegisterReqEntity = JSON.parse(request.body);
     const result = await createUser(userReq).catch((err) => {
+        console.warn(err);
         return err;
     });
-    if (result?.name === userReq.name && result?.email === userReq.email) {
+    if (result?.id) {
         return SUCCESS_RESULT;
     }
-    if (result.code === PRISMA_ERROR_CODE.P2002) {
+    if (result?.code === PRISMA_ERROR_CODE.P2002) {
         return USER_EMAIL_DUPLICATED;
     }
 

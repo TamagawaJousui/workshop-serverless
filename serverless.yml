@@ -39,6 +39,16 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/workshop_create.json)}
+  workshopList:
+    handler: src/workshops/list.handler
+    events:
+      - http:
+          path: /workshops/
+          method: get
+          request:
+            parameters:
+              querystrings:
+                status: false
 
 plugins:
   - serverless-esbuild

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { GENERAL_SERVER_ERROR, SUCCESS_RESULT } from "../constants";
+import { GENERAL_SERVER_ERROR } from "../constants";
 
 type WorkshopCreateEntity = {
     start_at: string;
@@ -16,13 +16,13 @@ async function createWorkShop(workshop: WorkshopCreateEntity) {
     const result = await prisma.workshops.create({
         data: workshop,
     });
-    console.log(result);
     return result;
 }
 
 export async function handler(request) {
     const workshopCreateEntity: WorkshopCreateEntity = JSON.parse(request.body);
     const result = await createWorkShop(workshopCreateEntity).catch((err) => {
+        console.warn(err);
         return err;
     });
     if (result?.id) {
