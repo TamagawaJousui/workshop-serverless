@@ -11,6 +11,7 @@ export const SUCCESS_RESULT = {
 export const API_KEY_LIFETIME = 3600 * 1000 * 24;
 
 export const PARAMETER_OF_WORKSHOR_LIST_QUERY = "status";
+export const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";
 
 export const WORKSHOP_STATUS_TYPE_ARRY = [
     "all",
@@ -18,6 +19,8 @@ export const WORKSHOP_STATUS_TYPE_ARRY = [
     "ongoing",
     "scheduled",
 ];
+
+export const DEFAULT_STATUS = "all";
 
 export type WorkshopCreateEntity = {
     start_at: string;

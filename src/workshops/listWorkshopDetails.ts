@@ -4,15 +4,16 @@ import {
     WORKSHOP_STATUS_TYPE_INCORRECT,
 } from "../constants/error_messages";
 import {
+    DEFAULT_STATUS,
     PARAMETER_OF_WORKSHOR_LIST_QUERY,
     WORKSHOP_STATUS_TYPE_ARRY,
 } from "../constants/constants";
+import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 type Status = "all" | "ended" | "ongoing" | "scheduled";
-const DEFAULT_STATUS = "all";
 
 const prisma = new PrismaClient();
 
-async function listWorkShop(status: Status) {
+async function listWorkshopDetails(status: Status) {
     const whereCondition: Record<string, object | undefined> = {
         start_at: undefined,
         end_at: undefined,
@@ -48,21 +49,18 @@ async function listWorkShop(status: Status) {
 
 export async function handler(request) {
     const status =
-        request?.queryStringParameters?.[PARAMETER_OF_WORKSHOR_LIST_QUERY] ??
+        request.queryStringParameters?.[PARAMETER_OF_WORKSHOR_LIST_QUERY] ??
         DEFAULT_STATUS;
     if (!WORKSHOP_STATUS_TYPE_ARRY.includes(status)) {
         return WORKSHOP_STATUS_TYPE_INCORRECT;
     }
-    const result = await listWorkShop(status).catch((err) => {
+
+    const result = await listWorkshopDetails(status).catch((err) => {
         console.warn(err);
         return err;
     });
-    if (Array.isArray(result)) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify(result),
-            headers: { "Content-Type": "application/json" },
-        };
-    }
+
+    if (!(result instanceof Error)) return genJsonHttpResponse(200, result);
+
     return GENERAL_SERVER_ERROR;
 }

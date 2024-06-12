@@ -30,9 +30,6 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/auth_user_request.json)}
-  # authorizer:
-  #   handler: src/users/authorizer.handler
-  #   events:
   addWorkshop:
     handler: src/workshops/addWorkshop.handler
     events:
@@ -52,8 +49,8 @@ functions:
             parameters:
               paths:
                 workshop_UUID: true
-  workshopList:
-    handler: src/workshops/list.handler
+  listWorkshopDetails:
+    handler: src/workshops/listWorkshopDetails.handler
     events:
       - http:
           path: /workshops/

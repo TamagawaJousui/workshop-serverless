@@ -5,11 +5,10 @@ import {
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
 } from "../constants/error_messages";
+import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import type { UUID } from "node:crypto";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-
-const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";
 
 const prisma = new PrismaClient();
 
