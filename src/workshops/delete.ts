@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import {
-    SUCCESS_RESULT,
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
     WORKSHOP_UUID_NOT_EXISTS,
     WORKSHOP_UUID_FORMAT_INCORRECT,
-} from "../constants";
+} from "../constants/error_messages";
+import { SUCCESS_RESULT } from "../constants/constants";
 import type { UUID } from "node:crypto";
 
 const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";

@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import {
     GENERAL_SERVER_ERROR,
-    USER_NOT_EXISTS,
+    USER_AUTHENTICATION_FAILED,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants";
+} from "../constants/error_messages";
 import type { UUID } from "node:crypto";
 
 type ReviewPostEntity = {
@@ -31,7 +31,7 @@ function postReview(reviewCreateEntity: ReviewPostEntity) {
             },
         });
         if (userInDb === null) {
-            return USER_NOT_EXISTS;
+            return USER_AUTHENTICATION_FAILED;
         }
 
         const reviewCreateEntiry = {

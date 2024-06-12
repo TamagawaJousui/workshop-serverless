@@ -4,9 +4,9 @@ import {
     PRISMA_ERROR_CODE,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants";
+} from "../constants/error_messages";
 import type { UUID } from "node:crypto";
-import type { WorkshopCreateEntity } from "../constants";
+import type { WorkshopCreateEntity } from "../constants/error_messages";
 
 type WorkshopUpdateEntity = {
     workshop_uuid: UUID;

@@ -3,11 +3,11 @@ import {
     SUCCESS_RESULT,
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
-    USER_NOT_EXISTS,
+    USER_AUTHENTICATION_FAILED,
     WORKSHOP_UUID_NOT_EXISTS,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_PARTICIPANT_DUPLICATED,
-} from "../constants";
+} from "../constants/error_messages";
 import type { UUID } from "node:crypto";
 
 const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";
@@ -32,7 +32,7 @@ function participateWorkshop(workshopUuid: UUID, userEmail: string) {
             },
         });
         if (userInDb === null) {
-            return USER_NOT_EXISTS;
+            return USER_AUTHENTICATION_FAILED;
         }
 
         const result = await client.participations.create({

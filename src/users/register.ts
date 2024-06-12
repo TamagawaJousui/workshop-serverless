@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { hashSync } from "bcryptjs";
+import { hashSync, genSaltSync } from "bcryptjs";
+import { SALT_ROUNDS, SUCCESS_RESULT } from "../constants/constants";
 import {
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
-    SALT_ROUNDS,
-    SUCCESS_RESULT,
     USER_EMAIL_DUPLICATED,
-} from "../constants";
+} from "../constants/error_messages";
 
 const prisma = new PrismaClient();
 
@@ -17,8 +16,7 @@ type UserRegisterReqEntity = {
 };
 
 async function createUser(user: UserRegisterReqEntity) {
-    const saltRounds = SALT_ROUNDS;
-    const hashedPassword = hashSync(user.password, saltRounds);
+    const hashedPassword = hashSync(user.password, SALT_ROUNDS);
     const UserCreatedEntity = {
         name: user.name,
         email: user.email,

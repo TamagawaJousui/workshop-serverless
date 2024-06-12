@@ -1,13 +1,3 @@
-export const SALT_ROUNDS: number = 10;
-
-export const isError = (err: unknown): err is Error => err instanceof Error;
-
-export const SUCCESS_RESULT = {
-    statusCode: 200,
-    body: JSON.stringify({ success: true }),
-    headers: { "Content-Type": "application/json" },
-};
-
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
     P2023: "P2023",
@@ -23,19 +13,19 @@ export const USER_EMAIL_DUPLICATED = {
     headers: { "Content-Type": "application/json" },
 };
 
-export const USER_NOT_EXISTS = {
+export const USER_AUTHENTICATION_FAILED = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "ユーザーのメールは未登録です",
+        errorMessage: "ユーザーのメールもしくはパスワードは正しくありません",
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
 };
 
-export const USER_PASSWORD_INCORRECT = {
+export const API_KEY_AUTHENTICATION_FAILED = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "ユーザーのメールもしくはパスワードは正しくありません",
+        errorMessage: "API KEYの認証は失敗しました",
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
@@ -49,17 +39,6 @@ export const GENERAL_SERVER_ERROR = {
     }),
     headers: { "Content-Type": "application/json" },
 };
-
-export const API_KEY_LIFETIME = 3600 * 1000 * 24;
-
-export const PARAMETER_OF_WORKSHOR_LIST_QUERY = "status";
-
-export const WORKSHOP_STATUS_TYPE_ARRY = [
-    "all",
-    "ended",
-    "ongoing",
-    "scheduled",
-];
 
 export const WORKSHOP_STATUS_TYPE_INCORRECT = {
     statusCode: 400,
@@ -113,13 +92,4 @@ export const WORKSHOP_PARTICIPANT_ALREADY_CANCELED = {
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
-};
-
-export type WorkshopCreateEntity = {
-    start_at: string;
-    end_at: string;
-    participation_method: string;
-    content?: string;
-    preparation?: string;
-    materials?: string;
 };

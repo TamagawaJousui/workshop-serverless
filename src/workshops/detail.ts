@@ -3,9 +3,8 @@ import {
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
     WORKSHOP_UUID_FORMAT_INCORRECT,
-    isError,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants";
+} from "../constants/error_messages";
 import type { UUID } from "node:crypto";
 
 const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";
@@ -31,7 +30,7 @@ export async function handler(request) {
     if (result === null) {
         return WORKSHOP_UUID_NOT_EXISTS;
     }
-    if (!isError(result))
+    if (!(result instanceof Error))
         return {
             statusCode: 200,
             body: JSON.stringify(result ?? {}),

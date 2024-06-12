@@ -1,13 +1,11 @@
 import crypto from "node:crypto";
 import { PrismaClient } from "@prisma/client";
-import { compareSync, hashSync } from "bcryptjs";
+import { compareSync } from "bcryptjs";
+import { API_KEY_LIFETIME } from "../constants/constants";
 import {
-    API_KEY_LIFETIME,
     GENERAL_SERVER_ERROR,
-    SALT_ROUNDS,
-    USER_NOT_EXISTS,
-    USER_PASSWORD_INCORRECT,
-} from "../constants";
+    USER_AUTHENTICATION_FAILED,
+} from "../constants/error_messages";
 
 const prisma = new PrismaClient();
 
@@ -24,15 +22,17 @@ function auth(user: UserLogonReqEntity) {
             },
         });
         if (userInDb === null) {
-            return USER_NOT_EXISTS;
+            return USER_AUTHENTICATION_FAILED;
         }
         const hashedPassword = userInDb.hashed_password;
         if (!compareSync(user.password, hashedPassword)) {
-            return USER_PASSWORD_INCORRECT;
+            return USER_AUTHENTICATION_FAILED;
         }
-        const apiKey = crypto.randomUUID();
-        const saltRounds = SALT_ROUNDS;
-        const hashedApiKey = hashSync(apiKey, saltRounds);
+        const rawApiKey = crypto.randomUUID();
+        const hashedApiKey = crypto
+            .createHash("sha256")
+            .update(rawApiKey)
+            .digest("hex");
         const expiredAt = new Date(Date.now() + API_KEY_LIFETIME).toISOString();
         await client.users.update({
             where: {
@@ -46,7 +46,7 @@ function auth(user: UserLogonReqEntity) {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                api_key: hashedApiKey,
+                api_key: rawApiKey,
                 expired_at: expiredAt,
             }),
             headers: { "Content-Type": "application/json" },

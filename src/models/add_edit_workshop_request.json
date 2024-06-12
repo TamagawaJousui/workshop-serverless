@@ -3,7 +3,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "title": "user logon",
-    "required": ["start_at", "end_at", "participation_method"],
+    "required": ["start_at", "end_at", "participation_method", "api_key"],
     "properties": {
         "start_at": {
             "type": "string",
@@ -24,6 +24,10 @@
         },
         "materials": {
             "type": "string"
+        },
+        "api_key": {
+            "type": "string",
+            "format": "uuid"
         }
     },
     "additionalProperties": false

@@ -33,15 +33,15 @@ functions:
   # authorizer:
   #   handler: src/users/authorizer.handler
   #   events:
-  workshopCreate:
-    handler: src/workshops/create.handler
+  addWorkshop:
+    handler: src/workshops/addWorkshop.handler
     events:
       - http:
           path: /workshops/
           method: post
           request:
             schemas:
-              application/json: ${file(./src/models/workshop_create.json)}
+              application/json: ${file(./src/models/add_edit_workshop_request.json)}
   workshopList:
     handler: src/workshops/list.handler
     events:
@@ -73,7 +73,7 @@ functions:
               paths:
                 workshop_UUID: true
             schemas:
-              application/json: ${file(./src/models/workshop_create.json)}
+              application/json: ${file(./src/models/add_edit_workshop_request.json)}
   workshopDelete:
     handler: src/workshops/delete.handler
     events:
