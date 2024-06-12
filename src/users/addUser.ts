@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { hashSync, genSaltSync } from "bcryptjs";
+import { hashSync } from "bcryptjs";
 import { SALT_ROUNDS, SUCCESS_RESULT } from "../constants/constants";
 import {
     GENERAL_SERVER_ERROR,
