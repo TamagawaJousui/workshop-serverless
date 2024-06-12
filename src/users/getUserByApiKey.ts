@@ -24,6 +24,9 @@ export async function getUserByApiKey(rawApiKey: string) {
     const result = await prisma.users.findFirst({
         where: {
             hashed_temporary_api_key: hashedTemporaryApiKey,
+            expired_at: {
+                gte: new Date(),
+            },
         },
     });
     return result;
