@@ -31,6 +31,15 @@ export const API_KEY_AUTHENTICATION_FAILED = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const USER_AUTHORITY_FAILED = {
+    statusCode: 400,
+    body: JSON.stringify({
+        errorMessage: "ユーザーはこの操作を実行する権限はありません",
+        errorType: "Error",
+    }),
+    headers: { "Content-Type": "application/json" },
+};
+
 export const GENERAL_SERVER_ERROR = {
     statusCode: 500,
     body: JSON.stringify({

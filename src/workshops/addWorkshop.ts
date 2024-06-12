@@ -55,7 +55,7 @@ export async function handler(request) {
         content: workshopReq.content,
         preparation: workshopReq.preparation,
         materials: workshopReq.materials,
-        user_id: user.id as UUID,
+        user_id: user.id,
     };
 
     const result = await addWorkShop(addWorkshopCreateEntity).catch((err) => {

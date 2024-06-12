@@ -12,7 +12,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
-async function getWorkShopDetail(workshopUuid: UUID) {
+export async function getWorkShopDetail(workshopUuid: UUID) {
     const result = await prisma.workshops.findUnique({
         where: {
             id: workshopUuid,

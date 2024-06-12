@@ -59,9 +59,8 @@ functions:
             parameters:
               querystrings:
                 status: false
-
-  workshopDetailEdit:
-    handler: src/workshops/edit.handler
+  editWorkshopDetail:
+    handler: src/workshops/editWorkshopDetail.handler
     events:
       - http:
           path: /workshops/{workshop_UUID}
