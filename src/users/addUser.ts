@@ -6,6 +6,7 @@ import {
     PRISMA_ERROR_CODE,
     USER_EMAIL_DUPLICATED,
 } from "../constants/error_messages";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -35,7 +36,10 @@ export async function handler(request) {
     if (result?.id) {
         return SUCCESS_RESULT;
     }
-    if (result?.code === PRISMA_ERROR_CODE.P2002) {
+    if (
+        result instanceof PrismaClientKnownRequestError &&
+        result.code === PRISMA_ERROR_CODE.P2002
+    ) {
         return USER_EMAIL_DUPLICATED;
     }
 

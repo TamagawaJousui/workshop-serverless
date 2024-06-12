@@ -42,6 +42,16 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/add_edit_workshop_request.json)}
+  getWorkshopDetail:
+    handler: src/workshops/getWorkshopDetail.handler
+    events:
+      - http:
+          path: /workshops/{workshop_UUID}
+          method: get
+          request:
+            parameters:
+              paths:
+                workshop_UUID: true
   workshopList:
     handler: src/workshops/list.handler
     events:
@@ -52,16 +62,7 @@ functions:
             parameters:
               querystrings:
                 status: false
-  workshopDetail:
-    handler: src/workshops/detail.handler
-    events:
-      - http:
-          path: /workshops/{workshop_UUID}
-          method: get
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
+
   workshopDetailEdit:
     handler: src/workshops/edit.handler
     events:

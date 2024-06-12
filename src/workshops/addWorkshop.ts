@@ -1,4 +1,4 @@
-import { PrismaClient, type users } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import {
     GENERAL_SERVER_ERROR,
     API_KEY_AUTHENTICATION_FAILED,
