@@ -36,6 +36,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "workshops" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "user_id" UUID NOT NULL,
     "start_at" TIMESTAMP(6) NOT NULL,
     "end_at" TIMESTAMP(6) NOT NULL,
     "participation_method" VARCHAR NOT NULL,
@@ -66,3 +67,5 @@ ALTER TABLE "reviews" ADD CONSTRAINT "reviews_user_id_fkey" FOREIGN KEY ("user_i
 -- AddForeignKey
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_workshop_id_fkey" FOREIGN KEY ("workshop_id") REFERENCES "workshops"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+-- AddForeignKey
+ALTER TABLE "workshops" ADD CONSTRAINT "workshops_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

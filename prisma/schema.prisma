@@ -39,10 +39,12 @@ model users {
   expired_at               DateTime?        @db.Timestamp(6)
   participations           participations[]
   reviews                  reviews[]
+  workshops                workshops[]
 }
 
 model workshops {
   id                       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                  String           @db.Uuid
   start_at                 DateTime         @db.Timestamp(6)
   end_at                   DateTime         @db.Timestamp(6)
   participation_method     String           @db.VarChar
@@ -53,4 +55,5 @@ model workshops {
   yumex_point_processed_at DateTime?        @db.Timestamp(6)
   participations           participations[]
   reviews                  reviews[]
+  users                    users            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
