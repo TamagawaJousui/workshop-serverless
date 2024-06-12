@@ -30,7 +30,6 @@ export async function handler(request) {
         return err;
     });
 
-    console.warn(result);
     if (result.statusCode) {
         return result;
     }

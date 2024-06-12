@@ -7,7 +7,7 @@
     "properties": {
         "user_email": {
             "type": "string",
-            "format": "uuid"
+            "format": "email"
         },
         "workshop_id": {
             "type": "string",

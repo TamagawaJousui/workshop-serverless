@@ -63,7 +63,6 @@ export async function handler(request) {
         },
     );
 
-    console.warn(result);
     if (result.statusCode) {
         return result;
     }
