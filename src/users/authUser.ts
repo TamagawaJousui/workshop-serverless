@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
 import { API_KEY_LIFETIME } from "../constants/constants";
+import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import {
     GENERAL_SERVER_ERROR,
     USER_AUTHENTICATION_FAILED,
@@ -9,12 +10,12 @@ import {
 
 const prisma = new PrismaClient();
 
-type UserLogonReqEntity = {
+type AuthUserReqEntity = {
     email: string;
     password: string;
 };
 
-function auth(user: UserLogonReqEntity) {
+function auth(user: AuthUserReqEntity) {
     return prisma.$transaction(async (client) => {
         const userInDb = await client.users.findUnique({
             where: {
@@ -43,19 +44,15 @@ function auth(user: UserLogonReqEntity) {
                 expired_at: expiredAt,
             },
         });
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                api_key: rawApiKey,
-                expired_at: expiredAt,
-            }),
-            headers: { "Content-Type": "application/json" },
-        };
+        return genJsonHttpResponse(200, {
+            api_key: rawApiKey,
+            expired_at: expiredAt,
+        });
     });
 }
 
 export async function handler(request) {
-    const userReq: UserLogonReqEntity = JSON.parse(request.body);
+    const userReq: AuthUserReqEntity = JSON.parse(request.body);
     const result = await auth(userReq).catch((err) => {
         console.warn(err);
         return err;

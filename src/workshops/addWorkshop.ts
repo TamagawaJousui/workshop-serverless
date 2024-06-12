@@ -7,7 +7,7 @@ import { getUserByApiKey } from "../users/getUserByApiKey";
 import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import type { UUID } from "node:crypto";
 
-type AddWorkshopRequestEntity = {
+type AddWorkshopReqEntity = {
     start_at: string;
     end_at: string;
     participation_method: string;
@@ -38,27 +38,23 @@ async function addWorkShop(workshop: AddWorkshopCreateEntity) {
 }
 
 export async function handler(request) {
-    const addWorkshopRequestEntity: AddWorkshopRequestEntity = JSON.parse(
-        request.body,
-    );
+    const workshopReq: AddWorkshopReqEntity = JSON.parse(request.body);
 
-    const user = await getUserByApiKey(addWorkshopRequestEntity.api_key).catch(
-        (err) => {
-            console.warn(err);
-            return err;
-        },
-    );
+    const user = await getUserByApiKey(workshopReq.api_key).catch((err) => {
+        console.warn(err);
+        return err;
+    });
     if (user instanceof Error) return GENERAL_SERVER_ERROR;
     if (user === null) return API_KEY_AUTHENTICATION_FAILED;
 
     // TODO もっとうまいやり方はあるはずです
     const addWorkshopCreateEntity: AddWorkshopCreateEntity = {
-        start_at: addWorkshopRequestEntity.start_at,
-        end_at: addWorkshopRequestEntity.end_at,
-        participation_method: addWorkshopRequestEntity.participation_method,
-        content: addWorkshopRequestEntity.content,
-        preparation: addWorkshopRequestEntity.preparation,
-        materials: addWorkshopRequestEntity.materials,
+        start_at: workshopReq.start_at,
+        end_at: workshopReq.end_at,
+        participation_method: workshopReq.participation_method,
+        content: workshopReq.content,
+        preparation: workshopReq.preparation,
+        materials: workshopReq.materials,
         user_id: user.id as UUID,
     };
 
@@ -66,7 +62,7 @@ export async function handler(request) {
         console.warn(err);
         return err;
     });
-    console.log(result);
+
     // TODO 返す値の判定はもっと適切の方法はありますかな
     if (result?.id) return genJsonHttpResponse(200, result);
 

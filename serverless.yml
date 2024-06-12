@@ -12,24 +12,24 @@ functions:
       - http:
           path: /hello
           method: get
-  userRegister:
-    handler: src/users/register.handler
+  addUser:
+    handler: src/users/addUser.handler
     events:
       - http:
           path: /users/register
           method: post
           request:
             schemas:
-              application/json: ${file(./src/models/user_register.json)}
-  userAuth:
-    handler: src/users/auth.handler
+              application/json: ${file(./src/models/add_user_request.json)}
+  authUser:
+    handler: src/users/authUser.handler
     events:
       - http:
           path: /users/auth
           method: post
           request:
             schemas:
-              application/json: ${file(./src/models/user_logon.json)}
+              application/json: ${file(./src/models/auth_user_request.json)}
   # authorizer:
   #   handler: src/users/authorizer.handler
   #   events:

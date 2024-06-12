@@ -9,25 +9,25 @@ import {
 
 const prisma = new PrismaClient();
 
-type UserRegisterReqEntity = {
+type AddUserReqEntity = {
     name: string;
     email: string;
     password: string;
 };
 
-async function createUser(user: UserRegisterReqEntity) {
+async function createUser(user: AddUserReqEntity) {
     const hashedPassword = hashSync(user.password, SALT_ROUNDS);
-    const UserCreatedEntity = {
+    const addUserCreateEntity = {
         name: user.name,
         email: user.email,
         hashed_password: hashedPassword,
     };
-    const result = await prisma.users.create({ data: UserCreatedEntity });
+    const result = await prisma.users.create({ data: addUserCreateEntity });
     return result;
 }
 
 export async function handler(request) {
-    const userReq: UserRegisterReqEntity = JSON.parse(request.body);
+    const userReq: AddUserReqEntity = JSON.parse(request.body);
     const result = await createUser(userReq).catch((err) => {
         console.warn(err);
         return err;
