@@ -88,32 +88,32 @@ functions:
                 workshop_UUID: true
               headers:
                 Authorization: true
-  workshopParticipate:
-    handler: src/workshops/participate.handler
+  participateInWorkshop:
+    handler: src/workshops/participateInWorkshop.handler
     events:
       - http:
-          path: /workshops/{workshop_UUID}/participants/{user_email}
+          path: /workshops/{workshop_UUID}/participants/
           method: post
           request:
             parameters:
               paths:
                 workshop_UUID: true
-                user_email: true
               headers:
                 Authorization: true
-  workshopCancelParticipate:
-    handler: src/workshops/cancelParticipate.handler
+  cancelParticipateInWorkshop:
+    handler: src/workshops/cancelParticipateInWorkshop.handler
     events:
       - http:
-          path: /workshops/{workshop_UUID}/participants/{user_email}
+          path: /workshops/{workshop_UUID}/participants/
           method: delete
           request:
             parameters:
               paths:
                 workshop_UUID: true
-                user_email: true
-  workshopListParticipants:
-    handler: src/workshops/listParticipants.handler
+              headers:
+                Authorization: true
+  listWorkshopParticipants:
+    handler: src/workshops/listWorkshopParticipants.handler
     events:
       - http:
           path: /workshops/{workshop_UUID}/participants/
@@ -122,8 +122,10 @@ functions:
             parameters:
               paths:
                 workshop_UUID: true
-  workshopPostReview:
-    handler: src/workshops/postReview.handler
+              headers:
+                Authorization: true
+  postWorkshopReview:
+    handler: src/workshops/postWorkshopReview.handler
     events:
       - http:
           path: /workshops/reviews/

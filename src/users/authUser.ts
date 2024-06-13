@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
-import { API_KEY_LIFETIME } from "../constants/constants";
 import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
+import { API_KEY_LIFETIME } from "../constants/constants";
 import {
     GENERAL_SERVER_ERROR,
     USER_AUTHENTICATION_FAILED,

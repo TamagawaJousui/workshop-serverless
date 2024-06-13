@@ -15,8 +15,6 @@ model participations {
   canceled_at      DateTime? @db.Timestamp(6)
   users            users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   workshops        workshops @relation(fields: [workshop_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@unique([user_id, workshop_id])
 }
 
 model reviews {

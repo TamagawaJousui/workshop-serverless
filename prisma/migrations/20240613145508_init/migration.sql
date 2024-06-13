@@ -50,9 +50,6 @@ CREATE TABLE "workshops" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "participations_user_id_workshop_id_key" ON "participations"("user_id", "workshop_id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey

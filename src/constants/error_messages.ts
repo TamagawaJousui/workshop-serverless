@@ -82,28 +82,34 @@ export const WORKSHOP_UUID_NOT_EXISTS = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE =
+    "ユーザーはすでにこの勉強会に参加登録済みです";
 export const WORKSHOP_PARTICIPANT_DUPLICATED = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "ユーザーはすでにこの勉強会に参加登録済みです",
+        errorMessage: WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
 };
 
-export const WORKSHOP_PARTICIPANT_NOT_EXISTS = {
+export const WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE =
+    "ユーザーはすでにこの勉強会に参加していません、若しくはキャセル済みです";
+export const WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "ユーザーはすでにこの勉強会に参加していません",
+        errorMessage: WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
 };
 
-export const WORKSHOP_PARTICIPANT_ALREADY_CANCELED = {
-    statusCode: 400,
+export const WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE =
+    "ユーザーのこの勉強会の参加記録が破損しました、システム管理者に連絡してください";
+export const WORKSHOP_PARTICIPANT_RECORD_CORRUPTED = {
+    statusCode: 500,
     body: JSON.stringify({
-        errorMessage: "ユーザーはすでにこの勉強会の参加登録はキャセル済みです",
+        errorMessage: WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },

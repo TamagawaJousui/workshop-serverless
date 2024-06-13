@@ -1,13 +1,13 @@
+import type { UUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
     GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
 } from "../constants/error_messages";
-import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
-import type { UUID } from "node:crypto";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 

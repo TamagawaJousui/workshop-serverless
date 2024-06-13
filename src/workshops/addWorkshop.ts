@@ -1,10 +1,10 @@
+import type { UUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import {
-    GENERAL_SERVER_ERROR,
     API_KEY_AUTHENTICATION_FAILED,
+    GENERAL_SERVER_ERROR,
 } from "../constants/error_messages";
 import { getUserByApiKey } from "../users/getUserByApiKey";
-import type { UUID } from "node:crypto";
 
 type AddWorkshopReqEntity = {
     start_at: string;

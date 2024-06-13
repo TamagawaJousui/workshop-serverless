@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import {
-    GENERAL_SERVER_ERROR,
-    WORKSHOP_STATUS_TYPE_INCORRECT,
-} from "../constants/error_messages";
-import {
     DEFAULT_STATUS,
     PARAMETER_OF_WORKSHOR_LIST_QUERY,
     WORKSHOP_STATUS_TYPE_ARRY,
 } from "../constants/constants";
+import {
+    GENERAL_SERVER_ERROR,
+    WORKSHOP_STATUS_TYPE_INCORRECT,
+} from "../constants/error_messages";
 type Status = "all" | "ended" | "ongoing" | "scheduled";
 
 const prisma = new PrismaClient();
