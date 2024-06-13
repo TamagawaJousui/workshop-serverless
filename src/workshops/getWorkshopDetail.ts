@@ -22,7 +22,6 @@ export async function getWorkShopDetail(workshopUuid: UUID) {
 }
 
 export async function handler(request) {
-    console.log(request);
     const workshopUuid: UUID =
         request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
     const result = await getWorkShopDetail(workshopUuid).catch((err) => {

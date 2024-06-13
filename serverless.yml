@@ -71,8 +71,8 @@ functions:
                 workshop_UUID: true
             schemas:
               application/json: ${file(./src/models/add_edit_workshop_request.json)}
-  workshopDelete:
-    handler: src/workshops/delete.handler
+  deleteWorkshop:
+    handler: src/workshops/deleteWorkshop.handler
     events:
       - http:
           path: /workshops/{workshop_UUID}
@@ -92,6 +92,8 @@ functions:
               paths:
                 workshop_UUID: true
                 user_email: true
+              headers:
+                Authorization: true
   workshopCancelParticipate:
     handler: src/workshops/cancelParticipate.handler
     events:

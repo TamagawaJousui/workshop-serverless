@@ -58,9 +58,7 @@ export async function handler(request) {
         return err;
     });
 
-    if (result.statusCode) {
-        return result;
-    }
+    if (!(result instanceof Error)) return result;
 
     return GENERAL_SERVER_ERROR;
 }

@@ -5,10 +5,12 @@ import {
     WORKSHOP_UUID_NOT_EXISTS,
     WORKSHOP_UUID_FORMAT_INCORRECT,
 } from "../constants/error_messages";
-import { SUCCESS_RESULT } from "../constants/constants";
+import {
+    SUCCESS_RESULT,
+    PARAMETER_OF_WORKSHOP_UUID,
+} from "../constants/constants";
 import type { UUID } from "node:crypto";
-
-const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +24,7 @@ async function deleteWorkshop(workshopUuid: UUID) {
 }
 
 export async function handler(request) {
+    console.log(request);
     const workshopUuid: UUID =
         request?.pathParameters?.[PARAMETER_OF_WORKSHOP_UUID];
 
@@ -30,13 +33,18 @@ export async function handler(request) {
         return err;
     });
 
-    if (result.statusCode) {
-        return result;
-    }
-    if (result?.code === PRISMA_ERROR_CODE.P2023) {
+    if (!(result instanceof Error)) return result;
+
+    if (
+        result instanceof PrismaClientKnownRequestError &&
+        result.code === PRISMA_ERROR_CODE.P2023
+    ) {
         return WORKSHOP_UUID_FORMAT_INCORRECT;
     }
-    if (result?.code === PRISMA_ERROR_CODE.P2025) {
+    if (
+        result instanceof PrismaClientKnownRequestError &&
+        result.code === PRISMA_ERROR_CODE.P2025
+    ) {
         return WORKSHOP_UUID_NOT_EXISTS;
     }
 

@@ -62,7 +62,7 @@ function editWorkshopDetail(
 
 export async function handler(request) {
     const workshopUuid: UUID =
-        request?.pathParameters?.[PARAMETER_OF_WORKSHOP_UUID];
+        request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
     const workshopReq: EditWorkshopReqEntity = JSON.parse(request.body);
 
     const user = await getUserByApiKey(workshopReq.api_key).catch((err) => {

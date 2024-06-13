@@ -33,9 +33,8 @@ export async function handler(request) {
         console.warn(err);
         return err;
     });
-    if (result?.id) {
-        return SUCCESS_RESULT;
-    }
+    if (!(result instanceof Error)) return SUCCESS_RESULT;
+
     if (
         result instanceof PrismaClientKnownRequestError &&
         result.code === PRISMA_ERROR_CODE.P2002

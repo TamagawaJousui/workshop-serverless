@@ -30,7 +30,6 @@ type AddWorkshopCreateEntity = {
 const prisma = new PrismaClient();
 
 async function addWorkShop(workshop: AddWorkshopCreateEntity) {
-    console.log(workshop);
     const result = await prisma.workshops.create({
         data: workshop,
     });
