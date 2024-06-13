@@ -6,6 +6,7 @@ import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import {
     GENERAL_SERVER_ERROR,
     USER_AUTHENTICATION_FAILED,
+    USER_AUTHENTICATION_FAILED_ERROR_MESSAGE,
 } from "../constants/error_messages";
 
 const prisma = new PrismaClient();
@@ -23,11 +24,11 @@ function auth(user: AuthUserReqEntity) {
             },
         });
         if (userInDb === null) {
-            return USER_AUTHENTICATION_FAILED;
+            throw new Error(USER_AUTHENTICATION_FAILED_ERROR_MESSAGE);
         }
         const hashedPassword = userInDb.hashed_password;
         if (!compareSync(user.password, hashedPassword)) {
-            return USER_AUTHENTICATION_FAILED;
+            throw new Error(USER_AUTHENTICATION_FAILED_ERROR_MESSAGE);
         }
         const rawApiKey = crypto.randomUUID();
         const hashedApiKey = crypto
@@ -35,7 +36,7 @@ function auth(user: AuthUserReqEntity) {
             .update(rawApiKey)
             .digest("hex");
         const expiredAt = new Date(Date.now() + API_KEY_LIFETIME).toISOString();
-        await client.users.update({
+        const updateResult = await client.users.update({
             where: {
                 email: user.email,
             },
@@ -44,10 +45,12 @@ function auth(user: AuthUserReqEntity) {
                 expired_at: expiredAt,
             },
         });
-        return genJsonHttpResponse(200, {
+        const result = {
+            id: updateResult.id,
             api_key: rawApiKey,
             expired_at: expiredAt,
-        });
+        };
+        return result;
     });
 }
 
@@ -58,7 +61,14 @@ export async function handler(request) {
         return err;
     });
 
-    if (!(result instanceof Error)) return result;
-
-    return GENERAL_SERVER_ERROR;
+    if (result instanceof Error) {
+        if (result.message === USER_AUTHENTICATION_FAILED_ERROR_MESSAGE)
+            return USER_AUTHENTICATION_FAILED;
+        return GENERAL_SERVER_ERROR;
+    }
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers: { "Content-Type": "application/json" },
+    };
 }

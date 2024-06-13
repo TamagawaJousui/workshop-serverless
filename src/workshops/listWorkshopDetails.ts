@@ -8,7 +8,6 @@ import {
     PARAMETER_OF_WORKSHOR_LIST_QUERY,
     WORKSHOP_STATUS_TYPE_ARRY,
 } from "../constants/constants";
-import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 type Status = "all" | "ended" | "ongoing" | "scheduled";
 
 const prisma = new PrismaClient();
@@ -51,6 +50,7 @@ export async function handler(request) {
     const status =
         request.queryStringParameters?.[PARAMETER_OF_WORKSHOR_LIST_QUERY] ??
         DEFAULT_STATUS;
+    // TODO ここの検証は、handlerの外でやるべきです。AWS::ApiGateway::RequestValidatorを使いますか?
     if (!WORKSHOP_STATUS_TYPE_ARRY.includes(status)) {
         return WORKSHOP_STATUS_TYPE_INCORRECT;
     }
@@ -60,7 +60,11 @@ export async function handler(request) {
         return err;
     });
 
-    if (!(result instanceof Error)) return genJsonHttpResponse(200, result);
+    if (result instanceof Error) return GENERAL_SERVER_ERROR;
 
-    return GENERAL_SERVER_ERROR;
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers: { "Content-Type": "application/json" },
+    };
 }

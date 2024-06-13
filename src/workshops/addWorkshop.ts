@@ -4,7 +4,6 @@ import {
     API_KEY_AUTHENTICATION_FAILED,
 } from "../constants/error_messages";
 import { getUserByApiKey } from "../users/getUserByApiKey";
-import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import type { UUID } from "node:crypto";
 
 type AddWorkshopReqEntity = {
@@ -14,7 +13,6 @@ type AddWorkshopReqEntity = {
     content?: string;
     preparation?: string;
     materials?: string;
-    api_key: UUID;
 };
 
 type AddWorkshopCreateEntity = {
@@ -38,8 +36,12 @@ async function addWorkShop(workshop: AddWorkshopCreateEntity) {
 
 export async function handler(request) {
     const workshopReq: AddWorkshopReqEntity = JSON.parse(request.body);
+    // bearerToken の検証は未実装
+    const bearerToken: string = request.headers.Authorization.slice(
+        "Bearer ".length,
+    );
 
-    const user = await getUserByApiKey(workshopReq.api_key).catch((err) => {
+    const user = await getUserByApiKey(bearerToken).catch((err) => {
         console.warn(err);
         return err;
     });
@@ -62,8 +64,11 @@ export async function handler(request) {
         return err;
     });
 
-    // TODO 返す値の判定はもっと適切の方法はありますかな
-    if (result?.id) return genJsonHttpResponse(200, result);
+    if (result instanceof Error) return GENERAL_SERVER_ERROR;
 
-    return GENERAL_SERVER_ERROR;
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers: { "Content-Type": "application/json" },
+    };
 }

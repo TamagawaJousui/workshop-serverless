@@ -1,5 +1,6 @@
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
+    P2016: "P2016",
     P2023: "P2023",
     P2025: "P2025",
 };
@@ -13,10 +14,13 @@ export const USER_EMAIL_DUPLICATED = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const USER_AUTHENTICATION_FAILED_ERROR_MESSAGE =
+    "ユーザーのメールもしくはパスワードは正しくありません";
+
 export const USER_AUTHENTICATION_FAILED = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "ユーザーのメールもしくはパスワードは正しくありません",
+        errorMessage: USER_AUTHENTICATION_FAILED_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },
@@ -67,10 +71,12 @@ export const WORKSHOP_UUID_FORMAT_INCORRECT = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE =
+    "勉強会のUUIDの存在しません";
 export const WORKSHOP_UUID_NOT_EXISTS = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: "勉強会のUUIDの存在しません",
+        errorMessage: WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },

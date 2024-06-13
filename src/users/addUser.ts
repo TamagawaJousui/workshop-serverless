@@ -33,14 +33,24 @@ export async function handler(request) {
         console.warn(err);
         return err;
     });
-    if (!(result instanceof Error)) return SUCCESS_RESULT;
 
-    if (
-        result instanceof PrismaClientKnownRequestError &&
-        result.code === PRISMA_ERROR_CODE.P2002
-    ) {
-        return USER_EMAIL_DUPLICATED;
+    if (result instanceof Error) {
+        if (
+            result instanceof PrismaClientKnownRequestError &&
+            result.code === PRISMA_ERROR_CODE.P2002
+        ) {
+            return USER_EMAIL_DUPLICATED;
+        }
+
+        return GENERAL_SERVER_ERROR;
     }
-
-    return GENERAL_SERVER_ERROR;
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            id: result.id,
+            name: result.name,
+            email: result.email,
+        }),
+        headers: { "Content-Type": "application/json" },
+    };
 }

@@ -6,7 +6,6 @@ import {
     WORKSHOP_UUID_NOT_EXISTS,
 } from "../constants/error_messages";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
-import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
 import type { UUID } from "node:crypto";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
@@ -29,17 +28,23 @@ export async function handler(request) {
         return err;
     });
 
+    if (result instanceof Error) {
+        if (
+            result instanceof PrismaClientKnownRequestError &&
+            result.code === PRISMA_ERROR_CODE.P2023
+        )
+            return WORKSHOP_UUID_FORMAT_INCORRECT;
+
+        return GENERAL_SERVER_ERROR;
+    }
+
     if (result === null) {
         return WORKSHOP_UUID_NOT_EXISTS;
     }
 
-    if (!(result instanceof Error)) return genJsonHttpResponse(200, result);
-
-    if (
-        result instanceof PrismaClientKnownRequestError &&
-        result.code === PRISMA_ERROR_CODE.P2023
-    )
-        return WORKSHOP_UUID_FORMAT_INCORRECT;
-
-    return GENERAL_SERVER_ERROR;
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result),
+        headers: { "Content-Type": "application/json" },
+    };
 }

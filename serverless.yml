@@ -39,6 +39,9 @@ functions:
           request:
             schemas:
               application/json: ${file(./src/models/add_edit_workshop_request.json)}
+            parameters:
+              headers:
+                Authorization: true
   getWorkshopDetail:
     handler: src/workshops/getWorkshopDetail.handler
     events:
@@ -69,6 +72,8 @@ functions:
             parameters:
               paths:
                 workshop_UUID: true
+              headers:
+                Authorization: true
             schemas:
               application/json: ${file(./src/models/add_edit_workshop_request.json)}
   deleteWorkshop:
@@ -81,6 +86,8 @@ functions:
             parameters:
               paths:
                 workshop_UUID: true
+              headers:
+                Authorization: true
   workshopParticipate:
     handler: src/workshops/participate.handler
     events:
