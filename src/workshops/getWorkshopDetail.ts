@@ -2,7 +2,6 @@ import type { UUID } from "node:crypto";
 import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
-import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
