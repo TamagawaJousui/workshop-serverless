@@ -15,12 +15,9 @@ functions:
   authUser:
     handler: src/users/authUser.handler
     events:
-      - http:
+      - httpApi:
           path: /users/auth
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/auth_user_request.json)}
   addWorkshop:
     handler: src/workshops/addWorkshop.handler
     events:

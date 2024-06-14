@@ -1,7 +1,14 @@
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
+import createError from "http-errors";
 import { signJwt } from "../authUtils/jwtUtil";
-import { USER_AUTHENTICATION_FAILED } from "../constants/errorMessages";
+import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";
+import { authUserschema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -26,15 +33,19 @@ async function signIn(userReq: AuthUserReqEntity) {
     return userInDb;
 }
 
-export async function handler(request) {
-    const userReq: AuthUserReqEntity = JSON.parse(request.body);
-    const userInDb = await signIn(userReq).catch((err) => {
+export async function lambdaHandler(request) {
+    const requestPayload: AuthUserReqEntity = request.body;
+    const userInDb = await signIn(requestPayload).catch((err) => {
         console.warn(err);
         return err;
     });
 
+    if (userInDb instanceof Error) {
+        throw createError(500);
+    }
+
     if (userInDb === null) {
-        return USER_AUTHENTICATION_FAILED;
+        throw createError(400, USER_AUTHENTICATION_FAILED_ERROR_MESSAGE);
     }
 
     const payload = {
@@ -51,3 +62,9 @@ export async function handler(request) {
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(jsonBodyParser())
+    .use(validator({ eventSchema: transpileSchema(authUserschema) }))
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);

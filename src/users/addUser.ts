@@ -61,5 +61,5 @@ export async function lambdaHandler(request) {
 export const handler = middy()
     .use(jsonBodyParser())
     .use(validator({ eventSchema: transpileSchema(addUserschema) }))
-    .use(httpErrorHandler({ fallbackMessage: "予期せぬエラーが発生しました" }))
+    .use(httpErrorHandler())
     .handler(lambdaHandler);

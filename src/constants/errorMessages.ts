@@ -1,3 +1,5 @@
+import exp from "node:constants";
+
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
     P2003: "P2003",
@@ -29,6 +31,11 @@ export const USER_AUTHENTICATION_FAILED = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const API_KEY_TYPE_INCORRECT_ERROR_MESSAGE =
+    "API KEYの種別が正しくありません";
+
+export const API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE =
+    "API KEYの認証は失敗しました";
 export const API_KEY_AUTHENTICATION_FAILED = {
     statusCode: 400,
     body: JSON.stringify({
