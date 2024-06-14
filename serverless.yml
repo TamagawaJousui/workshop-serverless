@@ -51,15 +51,9 @@ functions:
   participateInWorkshop:
     handler: src/workshops/participateInWorkshop.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: post
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
-              headers:
-                Authorization: true
   cancelParticipateInWorkshop:
     handler: src/workshops/cancelParticipateInWorkshop.handler
     events:

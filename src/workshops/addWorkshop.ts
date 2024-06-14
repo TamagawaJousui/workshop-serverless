@@ -38,7 +38,6 @@ export async function lambdaHandler(request) {
 
     if (result instanceof Error) {
         if (result instanceof PrismaClientKnownRequestError) {
-            // 外部キー制約のエラーとが出た場合、ユーザーがすでに存在しないことを示していますので、認証失敗のエラーを出す。
             throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
         }
         throw createError(500);

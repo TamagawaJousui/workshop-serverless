@@ -122,3 +122,5 @@ export const listWorkshopDetailsSchema = {
         },
     },
 };
+
+export const participateInWorkshopSchema = getWorkShopDetailSchema;

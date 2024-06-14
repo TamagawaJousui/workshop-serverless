@@ -1,16 +1,24 @@
-import type { UUID } from "node:crypto";
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
+import jwtAuthMiddleware, {
+    EncryptionAlgorithms,
+} from "middy-middleware-jwt-auth";
 import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import createError, { HttpError } from "http-errors";
+import { isTokenPayload, secret } from "../authUtils/jwtUtil";
+import { participateInWorkshopSchema } from "../constants/schemas";
+import type { UUID } from "node:crypto";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
-    API_KEY_AUTHENTICATION_FAILED,
-    GENERAL_SERVER_ERROR,
-    WORKSHOP_PARTICIPANT_DUPLICATED,
+    PRISMA_ERROR_CODE,
     WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
-    WORKSHOP_UUID_FORMAT_INCORRECT,
-    WORKSHOP_UUID_NOT_EXISTS,
+    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
+    API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { isUuidv4 } from "../dbUtils/isUuidv4";
-import { getWorkShopDetail } from "./getWorkshopDetail";
 
 const prisma = new PrismaClient();
 
@@ -24,8 +32,12 @@ function participateInWorkshop(workshopUuid: UUID, userUuid: UUID) {
             },
         });
 
-        if (participationsInDb.length !== 0)
-            throw new Error(WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE);
+        if (participationsInDb.length !== 0) {
+            throw createError(
+                400,
+                WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
+            );
+        }
 
         const result = await client.participations.create({
             data: {
@@ -38,41 +50,36 @@ function participateInWorkshop(workshopUuid: UUID, userUuid: UUID) {
     });
 }
 
-export async function handler(request) {
+export async function lambdaHandler(request) {
     const workshopUuid: UUID =
         request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
-    if (!isUuidv4(workshopUuid)) return WORKSHOP_UUID_FORMAT_INCORRECT;
+    const userUuid = request.auth.payload.sub;
 
-    // bearerToken の検証は未実装
-    const bearerToken: string = request.headers.Authorization.slice(
-        "Bearer ".length,
-    );
-
-    const user = await getUserByApiKey(bearerToken).catch((err) => {
-        console.warn(err);
-        return err;
-    });
-    if (user instanceof Error) return GENERAL_SERVER_ERROR;
-    if (user === null) return API_KEY_AUTHENTICATION_FAILED;
-
-    const workshop = await getWorkShopDetail(workshopUuid).catch((err) => {
-        console.warn(err);
-        return err;
-    });
-    if (workshop instanceof Error) return GENERAL_SERVER_ERROR;
-    if (workshop === null) return WORKSHOP_UUID_NOT_EXISTS;
-
-    const result = await participateInWorkshop(workshopUuid, user.id).catch(
+    const result = await participateInWorkshop(workshopUuid, userUuid).catch(
         (err) => {
             console.warn(err);
             return err;
         },
     );
     if (result instanceof Error) {
-        if (result.message === WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE)
-            return WORKSHOP_PARTICIPANT_DUPLICATED;
-
-        return GENERAL_SERVER_ERROR;
+        if (result instanceof HttpError) {
+            throw result;
+        }
+        if (
+            result instanceof PrismaClientKnownRequestError &&
+            result.code === PRISMA_ERROR_CODE.P2003 &&
+            (result.meta?.field_name as string).includes("workshop_id_fkey")
+        ) {
+            throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+        }
+        if (
+            result instanceof PrismaClientKnownRequestError &&
+            result.code === PRISMA_ERROR_CODE.P2003 &&
+            (result.meta?.field_name as string).includes("user_id_fkey")
+        ) {
+            throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
+        }
+        throw createError(500);
     }
 
     return {
@@ -81,3 +88,21 @@ export async function handler(request) {
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(httpHeaderNormalizer())
+    .use(
+        validator({
+            eventSchema: transpileSchema(participateInWorkshopSchema),
+        }),
+    )
+    .use(
+        jwtAuthMiddleware({
+            algorithm: EncryptionAlgorithms.HS256,
+            credentialsRequired: true,
+            isPayload: isTokenPayload,
+            secretOrPublicKey: secret,
+        }),
+    )
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);

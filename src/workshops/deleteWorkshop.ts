@@ -48,8 +48,9 @@ export async function lambdaHandler(request) {
         if (
             result instanceof PrismaClientKnownRequestError &&
             result.code === PRISMA_ERROR_CODE.P2025
-        )
+        ) {
             throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+        }
         throw createError(500);
     }
 
