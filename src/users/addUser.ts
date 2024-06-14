@@ -1,9 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { hashSync } from "bcryptjs";
-import { SALT_ROUNDS, SUCCESS_RESULT } from "../constants/constants";
+import { SALT_ROUNDS } from "../constants/constants";
 import {
-    GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
     USER_EMAIL_DUPLICATED,
 } from "../constants/error_messages";
