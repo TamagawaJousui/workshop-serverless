@@ -7,40 +7,58 @@ import { transpileSchema } from "@middy/validator/transpile";
 import jwtAuthMiddleware, {
     EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
+import type { UUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
+import {
+    PRISMA_ERROR_CODE,
+    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
+} from "../constants/errorMessages";
 import createError from "http-errors";
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";
-import { addWorkshopSchema } from "../constants/schemas";
+import { editWorkshopSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
-async function addWorkShop(workshop: AddWorkshopEntity) {
-    const result = await prisma.workshops.create({
-        data: workshop,
+async function updateWorkshopDetail(
+    updateWorkshopEntity: UpdateWorkshopEntity,
+) {
+    const result = await prisma.workshops.update({
+        where: {
+            id: updateWorkshopEntity.id,
+            user_id: updateWorkshopEntity.user_id,
+        },
+        data: updateWorkshopEntity,
     });
     return result;
 }
 
 export async function lambdaHandler(request) {
-    const payload: AddWorkshopReqEntity = request.body;
+    const workshopUuid: UUID =
+        request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
+    const payload: UpdateWorkshopReqEntity = request.body;
     const userUuid = request.auth.payload.sub;
 
-    const addWorkshopEntity = {
+    const updateWorkshopEntity = {
         ...payload,
+        id: workshopUuid,
         user_id: userUuid,
     };
-    const result = await addWorkShop(addWorkshopEntity).catch((err) => {
-        console.warn(err);
-        return err;
-    });
+
+    const result = await updateWorkshopDetail(updateWorkshopEntity).catch(
+        (err) => {
+            console.warn(err);
+            return err;
+        },
+    );
 
     if (result instanceof Error) {
-        if (result instanceof PrismaClientKnownRequestError) {
-            // 外部キー制約のエラーとが出た場合、ユーザーがすでに存在しないことを示していますので、認証失敗のエラーを出す。
-            throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
-        }
+        if (
+            result instanceof PrismaClientKnownRequestError &&
+            result.code === PRISMA_ERROR_CODE.P2025
+        )
+            throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
         throw createError(500);
     }
 
@@ -54,7 +72,7 @@ export async function lambdaHandler(request) {
 export const handler = middy()
     .use(jsonBodyParser())
     .use(httpHeaderNormalizer())
-    .use(validator({ eventSchema: transpileSchema(addWorkshopSchema) }))
+    .use(validator({ eventSchema: transpileSchema(editWorkshopSchema) }))
     .use(
         jwtAuthMiddleware({
             algorithm: EncryptionAlgorithms.HS256,

@@ -48,7 +48,6 @@ async function listWorkshopDetails(status: Status) {
 export async function lambdaHandler(request) {
     const status =
         request.queryStringParameters[PARAMETER_OF_WORKSHOR_LIST_QUERY];
-    console.log(status);
 
     const result = await listWorkshopDetails(status).catch((err) => {
         console.warn(err);

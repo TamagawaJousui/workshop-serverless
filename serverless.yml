@@ -36,20 +36,12 @@ functions:
       - httpApi:
           path: /workshops/
           method: get
-  editWorkshopDetail:
-    handler: src/workshops/editWorkshopDetail.handler
+  updateWorkshopDetail:
+    handler: src/workshops/updateWorkshopDetail.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}
           method: put
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
-              headers:
-                Authorization: true
-            schemas:
-              application/json: ${file(./src/models/add_edit_workshop_request.json)}
   deleteWorkshop:
     handler: src/workshops/deleteWorkshop.handler
     events:

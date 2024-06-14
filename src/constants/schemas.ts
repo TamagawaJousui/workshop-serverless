@@ -34,7 +34,7 @@ export const authUserSchema = {
     },
 };
 
-export const addEditWorkshopSchema = {
+export const addWorkshopSchema = {
     type: "object",
     properties: {
         body: {
@@ -52,6 +52,37 @@ export const addEditWorkshopSchema = {
         },
     },
     required: ["body"],
+};
+
+export const editWorkshopSchema = {
+    type: "object",
+    properties: {
+        body: {
+            type: "object",
+            properties: {
+                start_at: { type: "string", format: "date-time" },
+                end_at: { type: "string", format: "date-time" },
+                participation_method: { type: "string" },
+                content: { type: "string" },
+                preparation: { type: "string" },
+                materials: { type: "string" },
+            },
+            additionalProperties: false,
+            required: ["start_at", "end_at", "participation_method"],
+        },
+        pathParameters: {
+            type: "object",
+            properties: {
+                [PARAMETER_OF_WORKSHOP_UUID]: {
+                    type: "string",
+                    format: "uuid",
+                },
+            },
+            additionalProperties: false,
+            required: [PARAMETER_OF_WORKSHOP_UUID],
+        },
+    },
+    required: ["body", "pathParameters"],
 };
 
 export const getWorkShopDetailSchema = {
