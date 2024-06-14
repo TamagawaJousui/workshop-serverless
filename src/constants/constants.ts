@@ -8,7 +8,8 @@ export const SUCCESS_RESULT = {
     headers: { "Content-Type": "application/json" },
 };
 
-export const API_KEY_LIFETIME = 3600 * 1000 * 24;
+// 5 mins
+export const API_KEY_LIFETIME = 300 * 1000;
 
 export const PARAMETER_OF_WORKSHOR_LIST_QUERY = "status";
 export const PARAMETER_OF_WORKSHOP_UUID = "workshop_UUID";

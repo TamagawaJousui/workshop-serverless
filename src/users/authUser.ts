@@ -1,8 +1,6 @@
-import crypto from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
-import { genJsonHttpResponse } from "../HttpResponseUtil/genJsonHttpResponse";
-import { API_KEY_LIFETIME } from "../constants/constants";
+import { signJwt } from "../AuthUtil/jwtUtil";
 import {
     GENERAL_SERVER_ERROR,
     USER_AUTHENTICATION_FAILED,
@@ -16,59 +14,44 @@ type AuthUserReqEntity = {
     password: string;
 };
 
-function auth(user: AuthUserReqEntity) {
-    return prisma.$transaction(async (client) => {
-        const userInDb = await client.users.findUnique({
-            where: {
-                email: user.email,
-            },
-        });
-        if (userInDb === null) {
-            throw new Error(USER_AUTHENTICATION_FAILED_ERROR_MESSAGE);
-        }
-        const hashedPassword = userInDb.hashed_password;
-        if (!compareSync(user.password, hashedPassword)) {
-            throw new Error(USER_AUTHENTICATION_FAILED_ERROR_MESSAGE);
-        }
-        const rawApiKey = crypto.randomUUID();
-        const hashedApiKey = crypto
-            .createHash("sha256")
-            .update(rawApiKey)
-            .digest("hex");
-        const expiredAt = new Date(Date.now() + API_KEY_LIFETIME).toISOString();
-        const updateResult = await client.users.update({
-            where: {
-                email: user.email,
-            },
-            data: {
-                hashed_temporary_api_key: hashedApiKey,
-                expired_at: expiredAt,
-            },
-        });
-        const result = {
-            id: updateResult.id,
-            api_key: rawApiKey,
-            expired_at: expiredAt,
-        };
-        return result;
+async function signIn(userReq: AuthUserReqEntity) {
+    const userInDb = await prisma.users.findUnique({
+        where: {
+            email: userReq.email,
+        },
     });
+    if (userInDb === null) {
+        return userInDb;
+    }
+    const hashedPassword = userInDb.hashed_password;
+    if (!compareSync(userReq.password, hashedPassword)) {
+        return null;
+    }
+    return userInDb;
 }
 
 export async function handler(request) {
     const userReq: AuthUserReqEntity = JSON.parse(request.body);
-    const result = await auth(userReq).catch((err) => {
+    const userInDb = await signIn(userReq).catch((err) => {
         console.warn(err);
         return err;
     });
 
-    if (result instanceof Error) {
-        if (result.message === USER_AUTHENTICATION_FAILED_ERROR_MESSAGE)
-            return USER_AUTHENTICATION_FAILED;
-        return GENERAL_SERVER_ERROR;
+    if (userInDb === null) {
+        return USER_AUTHENTICATION_FAILED;
     }
+
+    const payload = {
+        sub: userInDb.id,
+    };
+    const protectedHeader = {
+        alg: "HS256",
+        typ: "JWT",
+    };
+    const jwt = await signJwt(payload, protectedHeader);
     return {
         statusCode: 200,
-        body: JSON.stringify(result),
+        body: JSON.stringify({ JWT: jwt }),
         headers: { "Content-Type": "application/json" },
     };
 }

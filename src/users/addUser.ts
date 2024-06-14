@@ -34,16 +34,13 @@ export async function handler(request) {
         return err;
     });
 
-    if (result instanceof Error) {
-        if (
-            result instanceof PrismaClientKnownRequestError &&
-            result.code === PRISMA_ERROR_CODE.P2002
-        ) {
-            return USER_EMAIL_DUPLICATED;
-        }
-
-        return GENERAL_SERVER_ERROR;
+    if (
+        result instanceof PrismaClientKnownRequestError &&
+        result.code === PRISMA_ERROR_CODE.P2002
+    ) {
+        return USER_EMAIL_DUPLICATED;
     }
+
     return {
         statusCode: 200,
         body: JSON.stringify({
