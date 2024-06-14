@@ -45,15 +45,9 @@ functions:
   deleteWorkshop:
     handler: src/workshops/deleteWorkshop.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}
           method: delete
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
-              headers:
-                Authorization: true
   participateInWorkshop:
     handler: src/workshops/participateInWorkshop.handler
     events:

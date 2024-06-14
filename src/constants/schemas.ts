@@ -54,7 +54,7 @@ export const addWorkshopSchema = {
     required: ["body"],
 };
 
-export const editWorkshopSchema = {
+export const updateWorkshopSchema = {
     type: "object",
     properties: {
         body: {
@@ -102,6 +102,8 @@ export const getWorkShopDetailSchema = {
     },
     required: ["pathParameters"],
 };
+
+export const deleteWorkShopDetailSchema = getWorkShopDetailSchema;
 
 export const listWorkshopDetailsSchema = {
     type: "object",

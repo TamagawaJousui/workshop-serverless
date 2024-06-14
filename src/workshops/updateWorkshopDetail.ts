@@ -17,7 +17,7 @@ import {
 } from "../constants/errorMessages";
 import createError from "http-errors";
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { editWorkshopSchema } from "../constants/schemas";
+import { updateWorkshopSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -72,7 +72,7 @@ export async function lambdaHandler(request) {
 export const handler = middy()
     .use(jsonBodyParser())
     .use(httpHeaderNormalizer())
-    .use(validator({ eventSchema: transpileSchema(editWorkshopSchema) }))
+    .use(validator({ eventSchema: transpileSchema(updateWorkshopSchema) }))
     .use(
         jwtAuthMiddleware({
             algorithm: EncryptionAlgorithms.HS256,

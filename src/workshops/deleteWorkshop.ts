@@ -1,61 +1,45 @@
-import type { UUID } from "node:crypto";
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
+import jwtAuthMiddleware, {
+    EncryptionAlgorithms,
+} from "middy-middleware-jwt-auth";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import createError from "http-errors";
+import { isTokenPayload, secret } from "../authUtils/jwtUtil";
+import { deleteWorkShopDetailSchema } from "../constants/schemas";
+import type { UUID } from "node:crypto";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
-    API_KEY_AUTHENTICATION_FAILED,
-    GENERAL_SERVER_ERROR,
     PRISMA_ERROR_CODE,
-    USER_AUTHORITY_FAILED,
-    WORKSHOP_UUID_FORMAT_INCORRECT,
-    WORKSHOP_UUID_NOT_EXISTS,
+    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { getWorkShopDetail } from "./getWorkshopDetail";
 
 const prisma = new PrismaClient();
 
-async function deleteWorkshop(workshopUuid: UUID) {
-    const result = await prisma.workshops.delete({
+async function deleteWorkshop(workshopUuid: UUID, userUuid: UUID) {
+    const result = await prisma.workshops.update({
         where: {
             id: workshopUuid,
+            user_id: userUuid,
+            canceled_at: null,
+        },
+        data: {
+            canceled_at: new Date(),
         },
     });
     return result;
 }
 
-export async function handler(request) {
+export async function lambdaHandler(request) {
     const workshopUuid: UUID =
         request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
-    // bearerToken の検証は未実装
-    const bearerToken: string = request.headers.Authorization.slice(
-        "Bearer ".length,
-    );
+    const userUuid = request.auth.payload.sub;
 
-    const user = await getUserByApiKey(bearerToken).catch((err) => {
-        console.warn(err);
-        return err;
-    });
-    if (user instanceof Error) return GENERAL_SERVER_ERROR;
-    if (user === null) return API_KEY_AUTHENTICATION_FAILED;
-
-    const workshop = await getWorkShopDetail(workshopUuid).catch((err) => {
-        console.warn(err);
-        return err;
-    });
-    if (workshop instanceof Error) {
-        if (
-            workshop instanceof PrismaClientKnownRequestError &&
-            workshop.code === PRISMA_ERROR_CODE.P2023
-        )
-            return WORKSHOP_UUID_FORMAT_INCORRECT;
-
-        return GENERAL_SERVER_ERROR;
-    }
-    if (workshop === null) return WORKSHOP_UUID_NOT_EXISTS;
-
-    if (user.id !== workshop.user_id) return USER_AUTHORITY_FAILED;
-
-    const result = await deleteWorkshop(workshopUuid).catch((err) => {
+    const result = await deleteWorkshop(workshopUuid, userUuid).catch((err) => {
         console.warn(err);
         return err;
     });
@@ -65,8 +49,8 @@ export async function handler(request) {
             result instanceof PrismaClientKnownRequestError &&
             result.code === PRISMA_ERROR_CODE.P2025
         )
-            return WORKSHOP_UUID_NOT_EXISTS;
-        return GENERAL_SERVER_ERROR;
+            throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+        throw createError(500);
     }
 
     return {
@@ -75,3 +59,19 @@ export async function handler(request) {
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(httpHeaderNormalizer())
+    .use(
+        validator({ eventSchema: transpileSchema(deleteWorkShopDetailSchema) }),
+    )
+    .use(
+        jwtAuthMiddleware({
+            algorithm: EncryptionAlgorithms.HS256,
+            credentialsRequired: true,
+            isPayload: isTokenPayload,
+            secretOrPublicKey: secret,
+        }),
+    )
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);
