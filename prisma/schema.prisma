@@ -33,8 +33,6 @@ model users {
   name                     String           @db.VarChar
   email                    String           @unique @db.VarChar
   hashed_password          String           @db.VarChar
-  hashed_temporary_api_key String?          @db.VarChar
-  expired_at               DateTime?        @db.Timestamp(6)
   participations           participations[]
   reviews                  reviews[]
   workshops                workshops[]

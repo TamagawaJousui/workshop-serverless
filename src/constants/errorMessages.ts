@@ -1,10 +1,13 @@
 export const PRISMA_ERROR_CODE = {
     P2002: "P2002",
+    P2003: "P2003",
     P2016: "P2016",
     P2023: "P2023",
     P2025: "P2025",
 };
 
+export const USER_EMAIL_DUPLICATED_ERROR_MESSAGE =
+    "ユーザーのメールは登録ずみです";
 export const USER_EMAIL_DUPLICATED = {
     statusCode: 400,
     body: JSON.stringify({
@@ -44,6 +47,7 @@ export const USER_AUTHORITY_FAILED = {
     headers: { "Content-Type": "application/json" },
 };
 
+export const GENERAL_SERVER_ERROR_MESSGAE = "予期せぬエラーが発生しました";
 export const GENERAL_SERVER_ERROR = {
     statusCode: 500,
     body: JSON.stringify({

@@ -1,11 +1,11 @@
 import type { UUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { verifyJwt } from "../authUtils/jwtUtil";
 import {
     API_KEY_AUTHENTICATION_FAILED,
-    GENERAL_SERVER_ERROR,
-} from "../constants/error_messages";
-import { getUserByApiKey } from "../users/getUserByApiKey";
-
+    PRISMA_ERROR_CODE,
+} from "../constants/errorMessages";
 type AddWorkshopReqEntity = {
     start_at: string;
     end_at: string;
@@ -41,22 +41,16 @@ export async function handler(request) {
         "Bearer ".length,
     );
 
-    const user = await getUserByApiKey(bearerToken).catch((err) => {
+    const jwtPayload = await verifyJwt(bearerToken).catch((err) => {
         console.warn(err);
         return err;
     });
-    if (user instanceof Error) return GENERAL_SERVER_ERROR;
-    if (user === null) return API_KEY_AUTHENTICATION_FAILED;
-
-    // TODO もっとうまいやり方はあるはずです
+    if (jwtPayload instanceof Error) {
+        return API_KEY_AUTHENTICATION_FAILED;
+    }
     const addWorkshopCreateEntity: AddWorkshopCreateEntity = {
-        start_at: workshopReq.start_at,
-        end_at: workshopReq.end_at,
-        participation_method: workshopReq.participation_method,
-        content: workshopReq.content,
-        preparation: workshopReq.preparation,
-        materials: workshopReq.materials,
-        user_id: user.id,
+        ...workshopReq,
+        user_id: jwtPayload.sub,
     };
 
     const result = await addWorkShop(addWorkshopCreateEntity).catch((err) => {
@@ -64,8 +58,13 @@ export async function handler(request) {
         return err;
     });
 
-    if (result instanceof Error) return GENERAL_SERVER_ERROR;
-
+    if (
+        result instanceof PrismaClientKnownRequestError &&
+        result.code === PRISMA_ERROR_CODE.P2003
+    ) {
+        // 外部キー制約のエラーが出た場合、ユーザーがすでに存在しないことを示していますので、認証失敗のエラーを出す。
+        return API_KEY_AUTHENTICATION_FAILED;
+    }
     return {
         statusCode: 200,
         body: JSON.stringify(result),

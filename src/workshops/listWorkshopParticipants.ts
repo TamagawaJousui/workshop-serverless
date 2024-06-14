@@ -8,7 +8,7 @@ import {
     WORKSHOP_PARTICIPANT_DUPLICATED,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants/error_messages";
+} from "../constants/errorMessages";
 
 const prisma = new PrismaClient();
 

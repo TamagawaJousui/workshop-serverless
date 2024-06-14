@@ -4,7 +4,7 @@ import {
     GENERAL_SERVER_ERROR,
     USER_AUTHENTICATION_FAILED,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants/error_messages";
+} from "../constants/errorMessages";
 
 type ReviewPostEntity = {
     user_email: string;

@@ -7,7 +7,7 @@ import {
 import {
     GENERAL_SERVER_ERROR,
     WORKSHOP_STATUS_TYPE_INCORRECT,
-} from "../constants/error_messages";
+} from "../constants/errorMessages";
 type Status = "all" | "ended" | "ongoing" | "scheduled";
 
 const prisma = new PrismaClient();

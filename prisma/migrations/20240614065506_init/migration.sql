@@ -27,8 +27,6 @@ CREATE TABLE "users" (
     "name" VARCHAR NOT NULL,
     "email" VARCHAR NOT NULL,
     "hashed_password" VARCHAR NOT NULL,
-    "hashed_temporary_api_key" VARCHAR,
-    "expired_at" TIMESTAMP(6),
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

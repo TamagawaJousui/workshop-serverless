@@ -1,6 +1,5 @@
 import type { UUID } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
-import { isUuidv4 } from "../DBUtil/isUuidv4";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
     API_KEY_AUTHENTICATION_FAILED,
@@ -11,8 +10,8 @@ import {
     WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants/error_messages";
-import { getUserByApiKey } from "../users/getUserByApiKey";
+} from "../constants/errorMessages";
+import { isUuidv4 } from "../dbUtils/isUuidv4";
 import { getWorkShopDetail } from "./getWorkshopDetail";
 
 const prisma = new PrismaClient();

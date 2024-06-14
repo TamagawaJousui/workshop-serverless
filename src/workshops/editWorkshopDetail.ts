@@ -9,9 +9,7 @@ import {
     USER_AUTHORITY_FAILED,
     WORKSHOP_UUID_FORMAT_INCORRECT,
     WORKSHOP_UUID_NOT_EXISTS,
-    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
-} from "../constants/error_messages";
-import { getUserByApiKey } from "../users/getUserByApiKey";
+} from "../constants/errorMessages";
 import { getWorkShopDetail } from "./getWorkshopDetail";
 
 type EditWorkshopReqEntity = {

@@ -6,21 +6,12 @@ provider:
   runtime: nodejs20.x
 
 functions:
-  hello:
-    handler: src/hello.handler
-    events:
-      - http:
-          path: /hello
-          method: get
   addUser:
     handler: src/users/addUser.handler
     events:
-      - http:
+      - httpApi:
           path: /users/register
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/add_user_request.json)}
   authUser:
     handler: src/users/authUser.handler
     events:

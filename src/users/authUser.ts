@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
-import { signJwt } from "../AuthUtil/jwtUtil";
-import { USER_AUTHENTICATION_FAILED } from "../constants/error_messages";
+import { signJwt } from "../authUtils/jwtUtil";
+import { USER_AUTHENTICATION_FAILED } from "../constants/errorMessages";
 
 const prisma = new PrismaClient();
 
