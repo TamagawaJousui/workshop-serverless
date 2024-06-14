@@ -20,6 +20,7 @@
     "dependencies": {
         "@middy/core": "^5.4.0",
         "@middy/http-error-handler": "^5.4.0",
+        "@middy/http-header-normalizer": "^5.4.0",
         "@middy/http-json-body-parser": "^5.4.0",
         "@middy/validator": "^5.4.0",
         "@prisma/client": "^5.14.0",
@@ -28,6 +29,7 @@
         "@types/node": "^20.14.2",
         "bcryptjs": "^2.4.3",
         "http-errors": "^2.0.0",
-        "jose": "^5.4.0"
+        "jose": "^5.4.0",
+        "middy-middleware-jwt-auth": "^6.1.0"
     }
 }

@@ -1,13 +1,17 @@
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import {
     DEFAULT_STATUS,
     PARAMETER_OF_WORKSHOR_LIST_QUERY,
-    WORKSHOP_STATUS_TYPE_ARRY,
 } from "../constants/constants";
-import {
-    GENERAL_SERVER_ERROR,
-    WORKSHOP_STATUS_TYPE_INCORRECT,
-} from "../constants/errorMessages";
+import { GENERAL_SERVER_ERROR } from "../constants/errorMessages";
+import { listWorkshopDetailsSchema } from "../constants/schemas";
+
 type Status = "all" | "ended" | "ongoing" | "scheduled";
 
 const prisma = new PrismaClient();
@@ -46,14 +50,11 @@ async function listWorkshopDetails(status: Status) {
     return result;
 }
 
-export async function handler(request) {
+export async function lambdaHandler(request) {
+    console.log(request);
     const status =
-        request.queryStringParameters?.[PARAMETER_OF_WORKSHOR_LIST_QUERY] ??
-        DEFAULT_STATUS;
-    // TODO ここの検証は、handlerの外でやるべきです。AWS::ApiGateway::RequestValidatorを使いますか?
-    if (!WORKSHOP_STATUS_TYPE_ARRY.includes(status)) {
-        return WORKSHOP_STATUS_TYPE_INCORRECT;
-    }
+        request.queryStringParameters?.[PARAMETER_OF_WORKSHOR_LIST_QUERY];
+    console.log(status);
 
     const result = await listWorkshopDetails(status).catch((err) => {
         console.warn(err);
@@ -68,3 +69,9 @@ export async function handler(request) {
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(httpHeaderNormalizer())
+    .use(validator({ eventSchema: transpileSchema(listWorkshopDetailsSchema) }))
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);

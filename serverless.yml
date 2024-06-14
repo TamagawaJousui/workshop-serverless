@@ -21,35 +21,21 @@ functions:
   addWorkshop:
     handler: src/workshops/addWorkshop.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/add_edit_workshop_request.json)}
-            parameters:
-              headers:
-                Authorization: true
   getWorkshopDetail:
     handler: src/workshops/getWorkshopDetail.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}
           method: get
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
   listWorkshopDetails:
     handler: src/workshops/listWorkshopDetails.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/
           method: get
-          request:
-            parameters:
-              querystrings:
-                status: false
   editWorkshopDetail:
     handler: src/workshops/editWorkshopDetail.handler
     events:

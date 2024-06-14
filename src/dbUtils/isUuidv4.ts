@@ -4,5 +4,5 @@ const v4 = new RegExp(
 
 export function isUuidv4(str: string) {
     const lowercase = str.toLowerCase();
-    return lowercase.match(v4);
+    return v4.test(lowercase);
 }

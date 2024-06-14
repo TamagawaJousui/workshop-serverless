@@ -1,29 +1,18 @@
-import type { UUID } from "node:crypto";
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
+import jwtAuthMiddleware, {
+    EncryptionAlgorithms,
+} from "middy-middleware-jwt-auth";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { verifyJwt } from "../authUtils/jwtUtil";
-import {
-    API_KEY_AUTHENTICATION_FAILED,
-    PRISMA_ERROR_CODE,
-} from "../constants/errorMessages";
-type AddWorkshopReqEntity = {
-    start_at: string;
-    end_at: string;
-    participation_method: string;
-    content?: string;
-    preparation?: string;
-    materials?: string;
-};
-
-type AddWorkshopCreateEntity = {
-    start_at: string;
-    end_at: string;
-    participation_method: string;
-    content?: string;
-    preparation?: string;
-    materials?: string;
-    user_id: UUID;
-};
+import createError from "http-errors";
+import { isTokenPayload, secret } from "../authUtils/jwtUtil";
+import { API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";
+import { addEditWorkshopSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -34,40 +23,45 @@ async function addWorkShop(workshop: AddWorkshopCreateEntity) {
     return result;
 }
 
-export async function handler(request) {
-    const workshopReq: AddWorkshopReqEntity = JSON.parse(request.body);
-    // bearerToken の検証は未実装
-    const bearerToken: string = request.headers.Authorization.slice(
-        "Bearer ".length,
-    );
+export async function lambdaHandler(request) {
+    const payload: AddWorkshopReqEntity = request.body;
+    const userUuid = request.auth.payload.sub;
 
-    const jwtPayload = await verifyJwt(bearerToken).catch((err) => {
-        console.warn(err);
-        return err;
-    });
-    if (jwtPayload instanceof Error) {
-        return API_KEY_AUTHENTICATION_FAILED;
-    }
-    const addWorkshopCreateEntity: AddWorkshopCreateEntity = {
-        ...workshopReq,
-        user_id: jwtPayload.sub,
+    const addWorkshopCreateEntity = {
+        ...payload,
+        user_id: userUuid,
     };
-
     const result = await addWorkShop(addWorkshopCreateEntity).catch((err) => {
         console.warn(err);
         return err;
     });
 
-    if (
-        result instanceof PrismaClientKnownRequestError &&
-        result.code === PRISMA_ERROR_CODE.P2003
-    ) {
-        // 外部キー制約のエラーが出た場合、ユーザーがすでに存在しないことを示していますので、認証失敗のエラーを出す。
-        return API_KEY_AUTHENTICATION_FAILED;
+    if (result instanceof Error) {
+        if (result instanceof PrismaClientKnownRequestError) {
+            // 外部キー制約のエラーとが出た場合、ユーザーがすでに存在しないことを示していますので、認証失敗のエラーを出す。
+            throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
+        }
+        throw createError(500);
     }
+
     return {
         statusCode: 200,
         body: JSON.stringify(result),
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(jsonBodyParser())
+    .use(httpHeaderNormalizer())
+    .use(validator({ eventSchema: transpileSchema(addEditWorkshopSchema) }))
+    .use(
+        jwtAuthMiddleware({
+            algorithm: EncryptionAlgorithms.HS256,
+            credentialsRequired: true,
+            isPayload: isTokenPayload,
+            secretOrPublicKey: secret,
+        }),
+    )
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);

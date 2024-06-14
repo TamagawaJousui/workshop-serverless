@@ -1,13 +1,15 @@
 import type { UUID } from "node:crypto";
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
-import {
-    GENERAL_SERVER_ERROR,
-    PRISMA_ERROR_CODE,
-    WORKSHOP_UUID_FORMAT_INCORRECT,
-    WORKSHOP_UUID_NOT_EXISTS,
-} from "../constants/errorMessages";
+import createError from "http-errors";
+import { WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE } from "../constants/errorMessages";
+import { getWorkShopDetailSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -20,7 +22,7 @@ export async function getWorkShopDetail(workshopUuid: UUID) {
     return result;
 }
 
-export async function handler(request) {
+export async function lambdaHandler(request) {
     const workshopUuid: UUID =
         request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
     const result = await getWorkShopDetail(workshopUuid).catch((err) => {
@@ -29,17 +31,11 @@ export async function handler(request) {
     });
 
     if (result instanceof Error) {
-        if (
-            result instanceof PrismaClientKnownRequestError &&
-            result.code === PRISMA_ERROR_CODE.P2023
-        )
-            return WORKSHOP_UUID_FORMAT_INCORRECT;
-
-        return GENERAL_SERVER_ERROR;
+        throw createError(500);
     }
 
     if (result === null) {
-        return WORKSHOP_UUID_NOT_EXISTS;
+        throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
     }
 
     return {
@@ -48,3 +44,9 @@ export async function handler(request) {
         headers: { "Content-Type": "application/json" },
     };
 }
+
+export const handler = middy()
+    .use(httpHeaderNormalizer())
+    .use(validator({ eventSchema: transpileSchema(getWorkShopDetailSchema) }))
+    .use(httpErrorHandler())
+    .handler(lambdaHandler);

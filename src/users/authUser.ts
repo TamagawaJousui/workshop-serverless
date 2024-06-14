@@ -8,7 +8,7 @@ import { compareSync } from "bcryptjs";
 import createError from "http-errors";
 import { signJwt } from "../authUtils/jwtUtil";
 import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";
-import { authUserschema } from "../constants/schemas";
+import { authUserSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -65,6 +65,6 @@ export async function lambdaHandler(request) {
 
 export const handler = middy()
     .use(jsonBodyParser())
-    .use(validator({ eventSchema: transpileSchema(authUserschema) }))
+    .use(validator({ eventSchema: transpileSchema(authUserSchema) }))
     .use(httpErrorHandler())
     .handler(lambdaHandler);

@@ -12,7 +12,7 @@ import {
     PRISMA_ERROR_CODE,
     USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { addUserschema } from "../constants/schemas";
+import { addUserSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 
@@ -60,6 +60,6 @@ export async function lambdaHandler(request) {
 
 export const handler = middy()
     .use(jsonBodyParser())
-    .use(validator({ eventSchema: transpileSchema(addUserschema) }))
+    .use(validator({ eventSchema: transpileSchema(addUserSchema) }))
     .use(httpErrorHandler())
     .handler(lambdaHandler);
