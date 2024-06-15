@@ -12,15 +12,16 @@ import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
 
+import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
+
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
   API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
   PRISMA_ERROR_CODE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
   WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { createParticipationSchema } from "../constants/schemas";
+import { createParticipationSchema } from "../models/schemas";
 
 const prisma = new PrismaClient();
 

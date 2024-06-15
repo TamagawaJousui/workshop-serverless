@@ -7,7 +7,7 @@ import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
-import * as createError from "http-errors";
+import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
@@ -17,7 +17,7 @@ import {
   USER_NOT_EXISTS_ERROR_MESSAGE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { createReviewSchema } from "../constants/schemas";
+import { createReviewSchema } from "../models/schemas";
 const prisma = new PrismaClient();
 
 type Review = {

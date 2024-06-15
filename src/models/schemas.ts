@@ -2,7 +2,7 @@ import {
   PARAMETER_OF_WORKSHOP_DEFAULT_STATUS,
   PARAMETER_OF_WORKSHOP_UUID,
   PARAMETER_OF_WORKSHOR_LIST_QUERY,
-} from "../constants/constants";
+} from "@/constants/constants";
 export const addUserSchema = {
   type: "object",
   properties: {

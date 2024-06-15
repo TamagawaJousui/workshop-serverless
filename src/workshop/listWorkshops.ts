@@ -4,11 +4,12 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
-import * as createError from "http-errors";
+import createError from "http-errors";
 
-import type { Status } from "../constants/constants";
-import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "../constants/constants";
-import { listWorkshopDetailsSchema } from "../constants/schemas";
+import type { Status } from "@/constants/constants";
+import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "@/constants/constants";
+
+import { listWorkshopDetailsSchema } from "../models/schemas";
 
 const prisma = new PrismaClient();
 

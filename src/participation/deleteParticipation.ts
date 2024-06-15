@@ -6,18 +6,19 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
-import * as createError from "http-errors";
+import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
 
+import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
+
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
   WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE,
   WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { deleteParticipationSchema } from "../constants/schemas";
+import { deleteParticipationSchema } from "../models/schemas";
 
 const prisma = new PrismaClient();
 

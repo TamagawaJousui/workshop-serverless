@@ -8,7 +8,7 @@ export const PRISMA_ERROR_CODE = {
 
 export const USER_NOT_EXISTS_ERROR_MESSAGE = "ユーザーは存在しません";
 export const USER_EMAIL_DUPLICATED_ERROR_MESSAGE =
-  "ユーザーのメールは登録ずみです";
+  "ユーザーのメールは登録済みです";
 export const USER_AUTHENTICATION_FAILED_ERROR_MESSAGE =
   "ユーザーのメールもしくはパスワードは正しくありません";
 export const API_KEY_TYPE_INCORRECT_ERROR_MESSAGE =

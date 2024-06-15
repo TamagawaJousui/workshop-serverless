@@ -1,23 +1,27 @@
-service: serverless-typescript-starter
+service: workshop-serverless
 frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs20.x
 
+# useDotenv: true
+
 functions:
-  addUser:
-    handler: src/user/addUser.handler
+  createUser:
+    handler: src/endpoints/user/createUserHandler.handler
     events:
       - httpApi:
           path: /users/register
           method: post
   authUser:
-    handler: src/user/authUser.handler
+    handler: src/endpoints/user/authUserHandler.handler
     events:
       - httpApi:
           path: /users/auth
           method: post
+    # environment:
+    #   JWT_SECRET: ${env:JWT_SECRET}
   addWorkshop:
     handler: src/workshop/addWorkshop.handler
     events:

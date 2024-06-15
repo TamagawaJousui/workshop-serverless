@@ -7,18 +7,19 @@ import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import * as createError from "http-errors";
+import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
 
+import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
+
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
   PRISMA_ERROR_CODE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "../constants/errorMessages";
-import { deleteWorkShopDetailSchema } from "../constants/schemas";
+import { deleteWorkShopDetailSchema } from "../models/schemas";
 
 const prisma = new PrismaClient();
 

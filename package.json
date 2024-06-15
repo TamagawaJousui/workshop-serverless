@@ -1,5 +1,5 @@
 {
-    "name": "serverless-typescript-starter",
+    "name": "workshop-serverless",
     "version": "1.0.0",
     "scripts": {
         "dev": "sls offline",

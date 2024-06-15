@@ -3,38 +3,15 @@ import httpErrorHandler from "@middy/http-error-handler";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-// import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-// import { hashSync } from "bcryptjs";
-import * as createError from "http-errors";
+import createError from "http-errors";
 
-// import { SALT_ROUNDS } from "../constants/constants";
 import {
   PRISMA_ERROR_CODE,
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
-} from "../constants/errorMessages";
-import { addUserSchema } from "../constants/schemas";
-
-import { createUser, type User } from "@/service/createUser";
-
-// const prisma = new PrismaClient();
-
-// type AddUserReqEntity = {
-//   name: string;
-//   email: string;
-//   password: string;
-// };
-
-// async function createUser(user: AddUserReqEntity) {
-//   const hashedPassword = hashSync(user.password, SALT_ROUNDS);
-//   const addUserCreateEntity = {
-//     name: user.name,
-//     email: user.email,
-//     hashed_password: hashedPassword,
-//   };
-//   const result = await prisma.users.create({ data: addUserCreateEntity });
-//   return result;
-// }
+} from "@/constants/errorMessages";
+import { addUserSchema } from "@/models/schemas";
+import { createUser, type User } from "@/services/db/createUser";
 
 export async function lambdaHandler(request) {
   const payload: User = request.body;
@@ -50,7 +27,7 @@ export async function lambdaHandler(request) {
     ) {
       throw createError(400, USER_EMAIL_DUPLICATED_ERROR_MESSAGE);
     }
-    throw createError(500);
+    throw result;
   }
 
   const response = (({ id, name, email }) => ({ id, name, email }))(result);
