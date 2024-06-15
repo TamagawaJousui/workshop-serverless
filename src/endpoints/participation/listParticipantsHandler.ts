@@ -5,7 +5,6 @@ import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import { PrismaClient } from "@prisma/client";
 import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
@@ -15,44 +14,23 @@ import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { listParticipantsSchema } from "@/models/schemas";
-
-const prisma = new PrismaClient();
-
-async function listParticipants(workshopUuid: UUID, userUuid: UUID) {
-  const workshop = await prisma.workshops.findUnique({
-    where: {
-      id: workshopUuid,
-      user_id: userUuid,
-      canceled_at: null,
-    },
-  });
-
-  if (workshop === null) {
-    throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
-  }
-
-  const result = await prisma.participations.findMany({
-    where: {
-      workshop_id: workshopUuid,
-      canceled_at: null,
-    },
-    include: {
-      users: {
-        select: {
-          email: true,
-        },
-      },
-    },
-  });
-  const emailList = result.map((participant) => participant.users.email);
-  return emailList;
-}
+import { listParticipants } from "@/services/db/participation/listParticipants";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
   const userUuid = request.auth.payload.sub;
 
-  const result = await listParticipants(workshopUuid, userUuid);
+  const result = await listParticipants(workshopUuid, userUuid).catch((err) => {
+    console.warn(err);
+    return err;
+  });
+
+  if (result instanceof Error) {
+    if (result.message === WORKSHOP_NOT_EXISTS_ERROR_MESSAGE) {
+      throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
+    }
+    throw result;
+  }
 
   return {
     statusCode: 200,
