@@ -49,25 +49,25 @@ functions:
           path: /workshops/{workshop_UUID}
           method: delete
   createParticipation:
-    handler: src/participation/createParticipation.handler
+    handler: src/endpoints/participation/createParticipationHandler.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: post
   deleteParticipation:
-    handler: src/participation/deleteParticipation.handler
+    handler: src/endpoints/participation/deleteParticipation.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: delete
   listParticipants:
-    handler: src/participation/listParticipants.handler
+    handler: src/endpoints/participation/listParticipants.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: get
   createReview:
-    handler: src/review/createReview.handler
+    handler: src/endpoints/review/createReview.handler
     events:
       - httpApi:
           path: /workshops/reviews/
