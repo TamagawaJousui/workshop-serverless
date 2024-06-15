@@ -4,6 +4,7 @@ declare module "process" {
       interface ProcessEnv {
         DATABASE_URL?: string;
         JWT_SECRET?: string;
+        API_KEY_LIFETIME?: number;
       }
     }
   }
