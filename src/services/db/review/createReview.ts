@@ -9,13 +9,17 @@ export type Review = {
   content: string;
 };
 
+export type ReviewWithUserId = Review & {
+  user_id: UUID;
+};
+
 /**
  * @throws {@link PrismaClientKnownRequestError}
  *  code: 'P2003', if user or workshop doesn't exists
  */
-export async function createReview(review: Review, userUuid: UUID) {
+export async function createReview(review: ReviewWithUserId) {
   const result = await prisma.reviews.create({
-    data: { ...review, user_id: userUuid, reviewed_at: new Date() },
+    data: { ...review, reviewed_at: new Date() },
   });
 
   return result;

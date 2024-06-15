@@ -23,7 +23,8 @@ export async function lambdaHandler(request) {
   const payload: Review = request.body;
   const userUuid = request.auth.payload.sub;
 
-  const result = await createReview(payload, userUuid).catch((err) => {
+  const review = { ...payload, user_id: userUuid };
+  const result = await createReview(review).catch((err) => {
     console.warn(err);
     return err;
   });
