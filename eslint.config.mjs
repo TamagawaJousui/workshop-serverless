@@ -2,6 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 
 export default [
@@ -10,8 +11,12 @@ export default [
   ...tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
   {
+    plugins: {
+      "simple-import-sort": simpleImportSort,
+    },
     rules: {
-        "sort-imports": "error"
-    }
-}
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+    },
+  },
 ];

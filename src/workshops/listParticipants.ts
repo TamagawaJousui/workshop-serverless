@@ -1,18 +1,20 @@
+import type { UUID } from "node:crypto";
+
 import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
+import { PrismaClient } from "@prisma/client";
+import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
-import { PrismaClient } from "@prisma/client";
-import createError from "http-errors";
+
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { listParticipantsSchema } from "../constants/schemas";
-import type { UUID } from "node:crypto";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "../constants/errorMessages";
+import { listParticipantsSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
 

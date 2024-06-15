@@ -1,5 +1,3 @@
-import exp from "node:constants";
-
 export const PRISMA_ERROR_CODE = {
   P2002: "P2002",
   P2003: "P2003",

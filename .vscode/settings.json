@@ -5,7 +5,8 @@
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "quickfix.biome": "explicit",
-        // "source.fixAll.eslint": "explicit",
+        // "quickfix.biome": "explicit",
+        // "source.organizeImports.biome": "explicit"
+        "source.fixAll.eslint": "explicit",
     }
 }

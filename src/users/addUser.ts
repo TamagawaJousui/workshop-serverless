@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { hashSync } from "bcryptjs";
 import createError from "http-errors";
+
 import { SALT_ROUNDS } from "../constants/constants";
 import {
   PRISMA_ERROR_CODE,

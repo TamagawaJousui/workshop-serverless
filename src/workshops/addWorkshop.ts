@@ -4,12 +4,13 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import jwtAuthMiddleware, {
-  EncryptionAlgorithms,
-} from "middy-middleware-jwt-auth";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError from "http-errors";
+import jwtAuthMiddleware, {
+  EncryptionAlgorithms,
+} from "middy-middleware-jwt-auth";
+
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
 import { API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";
 import { addWorkshopSchema } from "../constants/schemas";

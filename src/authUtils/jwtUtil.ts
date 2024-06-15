@@ -1,6 +1,8 @@
-import { type UUID, createSecretKey } from "node:crypto";
-import { SignJWT, jwtVerify } from "jose";
+import { createSecretKey, type UUID } from "node:crypto";
+
 import type { JWTHeaderParameters, JWTPayload } from "jose";
+import { jwtVerify, SignJWT } from "jose";
+
 import { API_KEY_LIFETIME } from "../constants/constants";
 import { isUuidv4 } from "../dbUtils/isUuidv4";
 
