@@ -3,13 +3,13 @@ import httpErrorHandler from "@middy/http-error-handler";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 
-import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "@/constants/constants";
+import { PARAMETER_OF_WORKSHOP_LIST_QUERY } from "@/constants/constants";
 import { listWorkshopDetailsSchema } from "@/models/schemas";
 import { listWorkshops } from "@/services/db/workshop/listWorkshops";
 
 export async function lambdaHandler(request) {
   const status =
-    request.queryStringParameters[PARAMETER_OF_WORKSHOR_LIST_QUERY];
+    request.queryStringParameters[PARAMETER_OF_WORKSHOP_LIST_QUERY];
   const result = await listWorkshops(status);
 
   return {

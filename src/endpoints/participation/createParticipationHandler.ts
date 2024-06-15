@@ -49,7 +49,7 @@ export async function lambdaHandler(request) {
       result.code === PRISMA_ERROR_CODE.P2003 &&
       (result.meta?.field_name as string).includes("user_id_fkey")
     ) {
-      throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
+      throw createError(401, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
     }
     throw result;
   }

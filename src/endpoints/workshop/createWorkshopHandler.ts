@@ -39,7 +39,7 @@ export async function lambdaHandler(request) {
       result instanceof PrismaClientKnownRequestError &&
       result.code === PRISMA_ERROR_CODE.P2003
     ) {
-      throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
+      throw createError(401, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
     }
     throw result;
   }

@@ -10,6 +10,8 @@ export const USER_AUTHENTICATION_FAILED_ERROR_MESSAGE =
   "ユーザーのメールもしくはパスワードは正しくありません";
 export const API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE =
   "API KEYの認証は失敗しました";
+export const USER_FORBIDDEN_ERROR_MESSAGE =
+  "ユーザーはこの操作をする権限はありません";
 export const WORKSHOP_NOT_EXISTS_ERROR_MESSAGE =
   "この操作ができる勉強会は存在しません";
 export const WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE =

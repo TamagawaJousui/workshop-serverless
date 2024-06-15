@@ -1,7 +1,7 @@
 import {
   PARAMETER_OF_WORKSHOP_DEFAULT_STATUS,
+  PARAMETER_OF_WORKSHOP_LIST_QUERY,
   PARAMETER_OF_WORKSHOP_UUID,
-  PARAMETER_OF_WORKSHOR_LIST_QUERY,
 } from "@/constants/constants";
 export const addUserSchema = {
   type: "object",
@@ -113,14 +113,14 @@ export const listWorkshopDetailsSchema = {
     queryStringParameters: {
       type: "object",
       properties: {
-        [PARAMETER_OF_WORKSHOR_LIST_QUERY]: {
+        [PARAMETER_OF_WORKSHOP_LIST_QUERY]: {
           type: "string",
           enum: ["all", "ended", "ongoing", "scheduled"],
           default: PARAMETER_OF_WORKSHOP_DEFAULT_STATUS,
         },
       },
       additionalProperties: false,
-      default: { [PARAMETER_OF_WORKSHOR_LIST_QUERY]: "all" },
+      default: { [PARAMETER_OF_WORKSHOP_LIST_QUERY]: "all" },
     },
   },
 };

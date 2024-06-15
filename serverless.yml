@@ -72,6 +72,12 @@ functions:
       - httpApi:
           path: /workshops/reviews/
           method: post
+  processPoint:
+    handler: src/endpoints/point/processPointHandler.handler
+    events:
+      - httpApi:
+          path: /point/
+          method: post
 
 plugins:
   - serverless-esbuild

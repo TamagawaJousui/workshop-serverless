@@ -8,5 +8,8 @@
     // "quickfix.biome": "explicit",
     // "source.organizeImports.biome": "explicit"
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "cSpell.words": [
+    "participations"
+  ]
 }
