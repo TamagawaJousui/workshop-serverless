@@ -10,7 +10,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError, { HttpError } from "http-errors";
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
-import { participateInWorkshopSchema } from "../constants/schemas";
+import { createParticipationSchema } from "../constants/schemas";
 import type { UUID } from "node:crypto";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
@@ -22,7 +22,7 @@ import {
 
 const prisma = new PrismaClient();
 
-function participateInWorkshop(workshopUuid: UUID, userUuid: UUID) {
+function createParticipation(workshopUuid: UUID, userUuid: UUID) {
     return prisma.$transaction(async (client) => {
         const participationsInDb = await client.participations.findMany({
             where: {
@@ -55,7 +55,7 @@ export async function lambdaHandler(request) {
         request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
     const userUuid = request.auth.payload.sub;
 
-    const result = await participateInWorkshop(workshopUuid, userUuid).catch(
+    const result = await createParticipation(workshopUuid, userUuid).catch(
         (err) => {
             console.warn(err);
             return err;
@@ -93,7 +93,7 @@ export const handler = middy()
     .use(httpHeaderNormalizer())
     .use(
         validator({
-            eventSchema: transpileSchema(participateInWorkshopSchema),
+            eventSchema: transpileSchema(createParticipationSchema),
         }),
     )
     .use(

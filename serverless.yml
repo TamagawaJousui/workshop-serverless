@@ -48,26 +48,20 @@ functions:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: delete
-  participateInWorkshop:
-    handler: src/workshops/participateInWorkshop.handler
+  createParticipation:
+    handler: src/workshops/createParticipation.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: post
-  cancelParticipateInWorkshop:
-    handler: src/workshops/cancelParticipateInWorkshop.handler
+  deleteParticipation:
+    handler: src/workshops/deleteParticipation.handler
     events:
       - http:
           path: /workshops/{workshop_UUID}/participants/
           method: delete
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
-              headers:
-                Authorization: true
-  listWorkshopParticipants:
-    handler: src/workshops/listWorkshopParticipants.handler
+  listParticipants:
+    handler: src/workshops/listParticipants.handler
     events:
       - http:
           path: /workshops/{workshop_UUID}/participants/

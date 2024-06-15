@@ -123,4 +123,6 @@ export const listWorkshopDetailsSchema = {
     },
 };
 
-export const participateInWorkshopSchema = getWorkShopDetailSchema;
+export const createParticipationSchema = getWorkShopDetailSchema;
+
+export const deleteParticipationSchema = createParticipationSchema;
