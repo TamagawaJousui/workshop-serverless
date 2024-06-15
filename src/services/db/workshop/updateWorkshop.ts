@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import type { Workshop } from "@/services/db/createWorkshop";
+import type { Workshop } from "@/services/db/workshop/createWorkshop";
 
 const prisma = new PrismaClient();
 

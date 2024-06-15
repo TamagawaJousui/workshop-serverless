@@ -17,7 +17,7 @@ export type WorkshopWithUserId = Workshop & {
 
 /**
  * @throws {@link PrismaClientKnownRequestError}
- *  code: 'P2003', if user not exists
+ *  code: 'P2003', if user doesn't exists
  */
 export async function createWorkShop(workshop: WorkshopWithUserId) {
   const result = await prisma.workshops.create({

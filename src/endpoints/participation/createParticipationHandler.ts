@@ -5,9 +5,8 @@ import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import createError, { HttpError } from "http-errors";
+import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
@@ -21,33 +20,7 @@ import {
   WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { createParticipationSchema } from "@/models/schemas";
-
-const prisma = new PrismaClient();
-
-function createParticipation(workshopUuid: UUID, userUuid: UUID) {
-  return prisma.$transaction(async (client) => {
-    const participationsInDb = await client.participations.findMany({
-      where: {
-        user_id: userUuid,
-        workshop_id: workshopUuid,
-        canceled_at: null,
-      },
-    });
-
-    if (participationsInDb.length !== 0) {
-      throw createError(400, WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE);
-    }
-
-    const result = await client.participations.create({
-      data: {
-        user_id: userUuid,
-        workshop_id: workshopUuid,
-        participation_at: new Date(),
-      },
-    });
-    return result;
-  });
-}
+import { createParticipation } from "@/services/db/participation/createParticipation";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
@@ -60,8 +33,8 @@ export async function lambdaHandler(request) {
     },
   );
   if (result instanceof Error) {
-    if (result instanceof HttpError) {
-      throw result;
+    if (result.message === WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE) {
+      throw createError(400, WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE);
     }
     if (
       result instanceof PrismaClientKnownRequestError &&
@@ -77,7 +50,7 @@ export async function lambdaHandler(request) {
     ) {
       throw createError(400, API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE);
     }
-    throw createError(500);
+    throw result;
   }
 
   return {
