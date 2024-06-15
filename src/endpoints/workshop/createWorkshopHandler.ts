@@ -25,11 +25,11 @@ export async function lambdaHandler(request) {
   const payload: Workshop = request.body;
   const userUuid = request.auth.payload.sub;
 
-  const addWorkshopEntity = {
+  const workshop = {
     ...payload,
     user_id: userUuid,
   };
-  const result = await createWorkShop(addWorkshopEntity).catch((err) => {
+  const result = await createWorkShop(workshop).catch((err) => {
     console.warn(err);
     return err;
   });

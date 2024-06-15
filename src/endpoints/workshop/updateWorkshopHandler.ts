@@ -29,13 +29,13 @@ export async function lambdaHandler(request) {
   const payload: Workshop = request.body;
   const userUuid = request.auth.payload.sub;
 
-  const updateWorkshopEntity = {
+  const workshop = {
     ...payload,
     id: workshopUuid,
     user_id: userUuid,
   };
 
-  const result = await updateWorkshop(updateWorkshopEntity).catch((err) => {
+  const result = await updateWorkshop(workshop).catch((err) => {
     console.warn(err);
     return err;
   });
