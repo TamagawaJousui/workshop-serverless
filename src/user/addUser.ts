@@ -3,39 +3,41 @@ import httpErrorHandler from "@middy/http-error-handler";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { hashSync } from "bcryptjs";
-import createError from "http-errors";
+// import { hashSync } from "bcryptjs";
+import * as createError from "http-errors";
 
-import { SALT_ROUNDS } from "../constants/constants";
+// import { SALT_ROUNDS } from "../constants/constants";
 import {
   PRISMA_ERROR_CODE,
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
 import { addUserSchema } from "../constants/schemas";
 
-const prisma = new PrismaClient();
+import { createUser, type User } from "@/service/createUser";
 
-type AddUserReqEntity = {
-  name: string;
-  email: string;
-  password: string;
-};
+// const prisma = new PrismaClient();
 
-async function createUser(user: AddUserReqEntity) {
-  const hashedPassword = hashSync(user.password, SALT_ROUNDS);
-  const addUserCreateEntity = {
-    name: user.name,
-    email: user.email,
-    hashed_password: hashedPassword,
-  };
-  const result = await prisma.users.create({ data: addUserCreateEntity });
-  return result;
-}
+// type AddUserReqEntity = {
+//   name: string;
+//   email: string;
+//   password: string;
+// };
+
+// async function createUser(user: AddUserReqEntity) {
+//   const hashedPassword = hashSync(user.password, SALT_ROUNDS);
+//   const addUserCreateEntity = {
+//     name: user.name,
+//     email: user.email,
+//     hashed_password: hashedPassword,
+//   };
+//   const result = await prisma.users.create({ data: addUserCreateEntity });
+//   return result;
+// }
 
 export async function lambdaHandler(request) {
-  const payload: AddUserReqEntity = request.body;
+  const payload: User = request.body;
   const result = await createUser(payload).catch((err) => {
     console.warn(err);
     return err;

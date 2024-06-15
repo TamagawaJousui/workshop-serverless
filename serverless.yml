@@ -7,67 +7,67 @@ provider:
 
 functions:
   addUser:
-    handler: src/users/addUser.handler
+    handler: src/user/addUser.handler
     events:
       - httpApi:
           path: /users/register
           method: post
   authUser:
-    handler: src/users/authUser.handler
+    handler: src/user/authUser.handler
     events:
       - httpApi:
           path: /users/auth
           method: post
   addWorkshop:
-    handler: src/workshops/addWorkshop.handler
+    handler: src/workshop/addWorkshop.handler
     events:
       - httpApi:
           path: /workshops/
           method: post
-  getWorkshopDetail:
-    handler: src/workshops/getWorkshopDetail.handler
+  getWorkshop:
+    handler: src/workshop/getWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: get
-  listWorkshopDetails:
-    handler: src/workshops/listWorkshopDetails.handler
+  listWorkshops:
+    handler: src/workshop/listWorkshops.handler
     events:
       - httpApi:
           path: /workshops/
           method: get
-  updateWorkshopDetail:
-    handler: src/workshops/updateWorkshopDetail.handler
+  updateWorkshop:
+    handler: src/workshop/updateWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: put
   deleteWorkshop:
-    handler: src/workshops/deleteWorkshop.handler
+    handler: src/workshop/deleteWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: delete
   createParticipation:
-    handler: src/workshops/createParticipation.handler
+    handler: src/participation/createParticipation.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: post
   deleteParticipation:
-    handler: src/workshops/deleteParticipation.handler
+    handler: src/participation/deleteParticipation.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: delete
   listParticipants:
-    handler: src/workshops/listParticipants.handler
+    handler: src/participation/listParticipants.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: get
   createReview:
-    handler: src/workshops/createReview.handler
+    handler: src/review/createReview.handler
     events:
       - httpApi:
           path: /workshops/reviews/

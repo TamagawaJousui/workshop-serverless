@@ -4,11 +4,19 @@ import type { JWTHeaderParameters, JWTPayload } from "jose";
 import { jwtVerify, SignJWT } from "jose";
 
 import { API_KEY_LIFETIME } from "../constants/constants";
-import { isUuidv4 } from "../dbUtils/isUuidv4";
 
 export const secret = process.env.JWT_SECRET as string;
 
 export const secretKey = createSecretKey(secret, "utf-8");
+
+const v4 = new RegExp(
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+);
+
+export function isUuidv4(str: string) {
+  const lowercase = str.toLowerCase();
+  return v4.test(lowercase);
+}
 
 export async function signJwt(
   payload: JWTPayload,
