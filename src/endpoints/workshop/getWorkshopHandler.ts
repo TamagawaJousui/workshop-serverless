@@ -5,33 +5,23 @@ import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import { PrismaClient } from "@prisma/client";
+
 import createError from "http-errors";
 
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { getWorkShopDetailSchema } from "@/models/schemas";
-
-const prisma = new PrismaClient();
-
-export async function getWorkShopDetail(workshopUuid: UUID) {
-  const result = await prisma.workshops.findUnique({
-    where: {
-      id: workshopUuid,
-    },
-  });
-  return result;
-}
+import { getWorkShop } from "@/services/db/getWorkshop";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
-  const result = await getWorkShopDetail(workshopUuid).catch((err) => {
+  const result = await getWorkShop(workshopUuid).catch((err) => {
     console.warn(err);
     return err;
   });
 
   if (result instanceof Error) {
-    throw createError(500);
+    throw result;
   }
 
   if (result === null) {

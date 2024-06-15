@@ -25,7 +25,7 @@ functions:
           path: /workshops/
           method: post
   getWorkshop:
-    handler: src/endpoints/workshop/getWorkshop.handler
+    handler: src/endpoints/workshop/getWorkshopHandler.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
