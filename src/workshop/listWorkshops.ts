@@ -4,7 +4,7 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
-import createError from "http-errors";
+import * as createError from "http-errors";
 
 import type { Status } from "../constants/constants";
 import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "../constants/constants";

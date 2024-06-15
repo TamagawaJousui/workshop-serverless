@@ -5,7 +5,7 @@ import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import { compareSync } from "bcryptjs";
-import createError from "http-errors";
+import * as createError from "http-errors";
 
 import { signJwt } from "../authUtils/jwtUtil";
 import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "../constants/errorMessages";

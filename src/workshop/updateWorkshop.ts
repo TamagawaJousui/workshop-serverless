@@ -8,7 +8,7 @@ import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import createError from "http-errors";
+import * as createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
