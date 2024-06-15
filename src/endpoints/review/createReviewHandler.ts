@@ -4,6 +4,7 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError from "http-errors";
 import jwtAuthMiddleware, {
   EncryptionAlgorithms,
@@ -16,8 +17,7 @@ import {
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { createReviewSchema } from "@/models/schemas";
-import { type Review, createReview } from "@/services/db/review/createReview";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { createReview, type Review } from "@/services/db/review/createReview";
 
 export async function lambdaHandler(request) {
   const payload: Review = request.body;
