@@ -32,6 +32,7 @@ export async function lambdaHandler(request) {
       return err;
     },
   );
+
   if (result instanceof Error) {
     if (result.message === WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE) {
       throw createError(400, WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE);
