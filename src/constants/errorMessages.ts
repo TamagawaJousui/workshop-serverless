@@ -15,7 +15,8 @@ export const API_KEY_TYPE_INCORRECT_ERROR_MESSAGE =
   "API KEYの種別が正しくありません";
 export const API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE =
   "API KEYの認証は失敗しました";
-export const WORKSHOP_NOT_EXISTS_ERROR_MESSAGE = "勉強会は存在しません";
+export const WORKSHOP_NOT_EXISTS_ERROR_MESSAGE =
+  "この操作ができる勉強会は存在しません";
 export const WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE =
   "ユーザーはすでにこの勉強会に参加登録済みです";
 export const WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE =

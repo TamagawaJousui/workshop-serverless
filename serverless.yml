@@ -43,7 +43,7 @@ functions:
           path: /workshops/{workshop_UUID}
           method: put
   deleteWorkshop:
-    handler: src/endpoints/workshop/deleteWorkshop.handler
+    handler: src/endpoints/workshop/deleteWorkshopHandler.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
