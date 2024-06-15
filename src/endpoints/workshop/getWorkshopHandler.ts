@@ -2,7 +2,6 @@ import type { UUID } from "node:crypto";
 
 import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
-import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 
@@ -36,7 +35,6 @@ export async function lambdaHandler(request) {
 }
 
 export const handler = middy()
-  .use(httpHeaderNormalizer())
   .use(validator({ eventSchema: transpileSchema(getWorkShopDetailSchema) }))
   .use(httpErrorHandler())
   .handler(lambdaHandler);
