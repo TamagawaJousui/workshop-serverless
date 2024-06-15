@@ -16,7 +16,7 @@ import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
     PRISMA_ERROR_CODE,
     WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
-    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
+    WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
     API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
 } from "../constants/errorMessages";
 
@@ -70,7 +70,7 @@ export async function lambdaHandler(request) {
             result.code === PRISMA_ERROR_CODE.P2003 &&
             (result.meta?.field_name as string).includes("workshop_id_fkey")
         ) {
-            throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+            throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
         }
         if (
             result instanceof PrismaClientKnownRequestError &&

@@ -17,6 +17,7 @@ export const addUserSchema = {
             required: ["name", "email", "password"],
         },
     },
+    required: ["body"],
 };
 
 export const authUserSchema = {
@@ -32,6 +33,7 @@ export const authUserSchema = {
             required: ["email", "password"],
         },
     },
+    required: ["body"],
 };
 
 export const addWorkshopSchema = {
@@ -124,5 +126,26 @@ export const listWorkshopDetailsSchema = {
 };
 
 export const createParticipationSchema = getWorkShopDetailSchema;
+export const deleteParticipationSchema = getWorkShopDetailSchema;
+export const listParticipantsSchema = getWorkShopDetailSchema;
 
-export const deleteParticipationSchema = createParticipationSchema;
+export const createReviewSchema = {
+    type: "object",
+    properties: {
+        body: {
+            type: "object",
+            required: ["workshop_id", "content"],
+            properties: {
+                workshop_id: {
+                    type: "string",
+                    format: "uuid",
+                },
+                content: {
+                    type: "string",
+                },
+            },
+            additionalProperties: false,
+        },
+    },
+    required: ["body"],
+};

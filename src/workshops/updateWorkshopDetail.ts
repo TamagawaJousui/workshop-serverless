@@ -13,7 +13,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import {
     PRISMA_ERROR_CODE,
-    WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
+    WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "../constants/errorMessages";
 import createError from "http-errors";
 import { isTokenPayload, secret } from "../authUtils/jwtUtil";
@@ -78,7 +78,7 @@ export async function lambdaHandler(request) {
             result instanceof PrismaClientKnownRequestError &&
             result.code === PRISMA_ERROR_CODE.P2025
         ) {
-            throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+            throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
         }
         throw createError(500);
     }

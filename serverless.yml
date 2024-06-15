@@ -57,30 +57,21 @@ functions:
   deleteParticipation:
     handler: src/workshops/deleteParticipation.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: delete
   listParticipants:
     handler: src/workshops/listParticipants.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/{workshop_UUID}/participants/
           method: get
-          request:
-            parameters:
-              paths:
-                workshop_UUID: true
-              headers:
-                Authorization: true
-  postWorkshopReview:
-    handler: src/workshops/postWorkshopReview.handler
+  createReview:
+    handler: src/workshops/createReview.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/reviews/
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/review_create.json)}
 
 plugins:
   - serverless-esbuild

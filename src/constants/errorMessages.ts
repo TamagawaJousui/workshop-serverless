@@ -8,6 +8,8 @@ export const PRISMA_ERROR_CODE = {
     P2025: "P2025",
 };
 
+export const USER_NOT_EXISTS_ERROR_MESSAGE = "ユーザーは存在しません";
+
 export const USER_EMAIL_DUPLICATED_ERROR_MESSAGE =
     "ユーザーのメールは登録ずみです";
 export const USER_EMAIL_DUPLICATED = {
@@ -82,12 +84,11 @@ export const WORKSHOP_UUID_FORMAT_INCORRECT = {
     headers: { "Content-Type": "application/json" },
 };
 
-export const WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE =
-    "勉強会のUUIDの存在しません";
+export const WORKSHOP_NOT_EXISTS_ERROR_MESSAGE = "勉強会のUUIDの存在しません";
 export const WORKSHOP_UUID_NOT_EXISTS = {
     statusCode: 400,
     body: JSON.stringify({
-        errorMessage: WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE,
+        errorMessage: WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
         errorType: "Error",
     }),
     headers: { "Content-Type": "application/json" },

@@ -7,7 +7,7 @@ import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClient } from "@prisma/client";
 import { PARAMETER_OF_WORKSHOP_UUID } from "../constants/constants";
 import createError from "http-errors";
-import { WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE } from "../constants/errorMessages";
+import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "../constants/errorMessages";
 import { getWorkShopDetailSchema } from "../constants/schemas";
 
 const prisma = new PrismaClient();
@@ -34,7 +34,7 @@ export async function lambdaHandler(request) {
     }
 
     if (result === null) {
-        throw createError(400, WORKSHOP_UUID_NOT_EXISTS_ERROR_MESSAGE);
+        throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
     }
 
     return {
