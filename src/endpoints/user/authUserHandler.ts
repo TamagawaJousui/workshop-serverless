@@ -8,7 +8,7 @@ import createError from "http-errors";
 import { signJwt } from "@/authUtils/jwtUtil";
 import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { authUserSchema } from "@/models/schemas";
-import { type Auth, signInUser } from "@/services/db/signInUser";
+import { type Auth, signInUser } from "@/services/db/user/signInUser";
 
 export async function lambdaHandler(request) {
   const requestPayload: Auth = request.body;

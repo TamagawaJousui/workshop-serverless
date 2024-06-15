@@ -19,7 +19,10 @@ import {
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { updateWorkshopSchema } from "@/models/schemas";
-import { updateWorkshop, type Workshop } from "@/services/db/updateWorkshop";
+import {
+  updateWorkshop,
+  type Workshop,
+} from "@/services/db/workshop/updateWorkshop";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];

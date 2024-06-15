@@ -11,7 +11,7 @@ import {
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { addUserSchema } from "@/models/schemas";
-import { createUser, type User } from "@/services/db/createUser";
+import { createUser, type User } from "@/services/db/user/createUser";
 
 export async function lambdaHandler(request) {
   const payload: User = request.body;

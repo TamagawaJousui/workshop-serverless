@@ -5,7 +5,6 @@ import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError from "http-errors";
 import jwtAuthMiddleware, {
@@ -19,7 +18,7 @@ import {
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { deleteWorkShopDetailSchema } from "@/models/schemas";
-import { deleteWorkshop } from "@/services/db/deleteWorkshop";
+import { deleteWorkshop } from "@/services/db/workshop/deleteWorkshop";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];

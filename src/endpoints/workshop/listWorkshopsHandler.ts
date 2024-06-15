@@ -5,7 +5,7 @@ import { transpileSchema } from "@middy/validator/transpile";
 
 import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "@/constants/constants";
 import { listWorkshopDetailsSchema } from "@/models/schemas";
-import { listWorkshops } from "@/services/db/listWorkshops";
+import { listWorkshops } from "@/services/db/workshop/listWorkshops";
 
 export async function lambdaHandler(request) {
   const status =

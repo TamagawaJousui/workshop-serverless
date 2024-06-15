@@ -9,7 +9,7 @@ import createError from "http-errors";
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { getWorkShopDetailSchema } from "@/models/schemas";
-import { getWorkShop } from "@/services/db/getWorkshop";
+import { getWorkShop } from "@/services/db/workshop/getWorkshop";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];

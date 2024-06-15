@@ -16,7 +16,10 @@ import {
   PRISMA_ERROR_CODE,
 } from "@/constants/errorMessages";
 import { addWorkshopSchema } from "@/models/schemas";
-import { createWorkShop, type Workshop } from "@/services/db/createWorkshop";
+import {
+  createWorkShop,
+  type Workshop,
+} from "@/services/db/workshop/createWorkshop";
 
 export async function lambdaHandler(request) {
   const payload: Workshop = request.body;
