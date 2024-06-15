@@ -13,39 +13,38 @@ import { getWorkShopDetailSchema } from "../constants/schemas";
 const prisma = new PrismaClient();
 
 export async function getWorkShopDetail(workshopUuid: UUID) {
-    const result = await prisma.workshops.findUnique({
-        where: {
-            id: workshopUuid,
-        },
-    });
-    return result;
+  const result = await prisma.workshops.findUnique({
+    where: {
+      id: workshopUuid,
+    },
+  });
+  return result;
 }
 
 export async function lambdaHandler(request) {
-    const workshopUuid: UUID =
-        request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
-    const result = await getWorkShopDetail(workshopUuid).catch((err) => {
-        console.warn(err);
-        return err;
-    });
+  const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
+  const result = await getWorkShopDetail(workshopUuid).catch((err) => {
+    console.warn(err);
+    return err;
+  });
 
-    if (result instanceof Error) {
-        throw createError(500);
-    }
+  if (result instanceof Error) {
+    throw createError(500);
+  }
 
-    if (result === null) {
-        throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
-    }
+  if (result === null) {
+    throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
+  }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(result),
-        headers: { "Content-Type": "application/json" },
-    };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(result),
+    headers: { "Content-Type": "application/json" },
+  };
 }
 
 export const handler = middy()
-    .use(httpHeaderNormalizer())
-    .use(validator({ eventSchema: transpileSchema(getWorkShopDetailSchema) }))
-    .use(httpErrorHandler())
-    .handler(lambdaHandler);
+  .use(httpHeaderNormalizer())
+  .use(validator({ eventSchema: transpileSchema(getWorkShopDetailSchema) }))
+  .use(httpErrorHandler())
+  .handler(lambdaHandler);
