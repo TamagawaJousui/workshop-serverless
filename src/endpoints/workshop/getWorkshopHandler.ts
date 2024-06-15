@@ -4,7 +4,6 @@ import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-
 import createError from "http-errors";
 
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";

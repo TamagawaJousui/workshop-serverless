@@ -6,7 +6,6 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
-import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError from "http-errors";
 import jwtAuthMiddleware, {
@@ -20,45 +19,11 @@ import {
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
 import { updateWorkshopSchema } from "@/models/schemas";
-
-const prisma = new PrismaClient();
-
-type UpdateWorkshopReqEntity = {
-  start_at: string;
-  end_at: string;
-  participation_method: string;
-  content?: string;
-  preparation?: string;
-  materials?: string;
-};
-
-type UpdateWorkshopEntity = {
-  id: string;
-  start_at: string;
-  end_at: string;
-  participation_method: string;
-  content?: string;
-  preparation?: string;
-  materials?: string;
-  user_id: string;
-};
-
-async function updateWorkshopDetail(
-  updateWorkshopEntity: UpdateWorkshopEntity,
-) {
-  const result = await prisma.workshops.update({
-    where: {
-      id: updateWorkshopEntity.id,
-      user_id: updateWorkshopEntity.user_id,
-    },
-    data: updateWorkshopEntity,
-  });
-  return result;
-}
+import { updateWorkshop, type Workshop } from "@/services/db/updateWorkshop";
 
 export async function lambdaHandler(request) {
   const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
-  const payload: UpdateWorkshopReqEntity = request.body;
+  const payload: Workshop = request.body;
   const userUuid = request.auth.payload.sub;
 
   const updateWorkshopEntity = {
@@ -67,12 +32,10 @@ export async function lambdaHandler(request) {
     user_id: userUuid,
   };
 
-  const result = await updateWorkshopDetail(updateWorkshopEntity).catch(
-    (err) => {
-      console.warn(err);
-      return err;
-    },
-  );
+  const result = await updateWorkshop(updateWorkshopEntity).catch((err) => {
+    console.warn(err);
+    return err;
+  });
 
   if (result instanceof Error) {
     if (
@@ -81,7 +44,7 @@ export async function lambdaHandler(request) {
     ) {
       throw createError(400, WORKSHOP_NOT_EXISTS_ERROR_MESSAGE);
     }
-    throw createError(500);
+    throw result;
   }
 
   return {

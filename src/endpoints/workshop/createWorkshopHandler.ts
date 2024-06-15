@@ -12,8 +12,8 @@ import jwtAuthMiddleware, {
 
 import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
 import {
-  PRISMA_ERROR_CODE,
   API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
+  PRISMA_ERROR_CODE,
 } from "@/constants/errorMessages";
 import { addWorkshopSchema } from "@/models/schemas";
 import { createWorkShop, type Workshop } from "@/services/db/createWorkshop";

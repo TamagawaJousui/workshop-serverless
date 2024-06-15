@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import type { Status } from "@/constants/constants";
 
 const prisma = new PrismaClient();

@@ -37,7 +37,7 @@ functions:
           path: /workshops/
           method: get
   updateWorkshop:
-    handler: src/endpoints/workshop/updateWorkshop.handler
+    handler: src/endpoints/workshop/updateWorkshopHandler.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}

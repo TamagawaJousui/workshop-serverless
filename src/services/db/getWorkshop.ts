@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import type { UUID } from "node:crypto";
+
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
