@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { hashSync } from "bcryptjs";
 
-import { SALT_ROUNDS } from "../../constants/constants";
+import { SALT_ROUNDS } from "@/constants/constants";
 
 export type User = {
   name: string;

@@ -2,9 +2,9 @@ import { createSecretKey, type UUID } from "node:crypto";
 
 import type { JWTHeaderParameters, JWTPayload } from "jose";
 import { jwtVerify, SignJWT } from "jose";
-import { jwtSecret } from "@/env";
 
 import { API_KEY_LIFETIME } from "@/constants/constants";
+import { jwtSecret } from "@/env";
 
 export const secret = jwtSecret;
 

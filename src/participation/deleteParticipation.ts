@@ -11,14 +11,13 @@ import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
 
+import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
-
-import { isTokenPayload, secret } from "../authUtils/jwtUtil";
 import {
   WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE,
   WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE,
-} from "../constants/errorMessages";
-import { deleteParticipationSchema } from "../models/schemas";
+} from "@/constants/errorMessages";
+import { deleteParticipationSchema } from "@/models/schemas";
 
 const prisma = new PrismaClient();
 

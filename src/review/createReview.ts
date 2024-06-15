@@ -12,12 +12,12 @@ import jwtAuthMiddleware, {
   EncryptionAlgorithms,
 } from "middy-middleware-jwt-auth";
 
-import { isTokenPayload, secret } from "../authUtils/jwtUtil";
+import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
 import {
   USER_NOT_EXISTS_ERROR_MESSAGE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
-} from "../constants/errorMessages";
-import { createReviewSchema } from "../models/schemas";
+} from "@/constants/errorMessages";
+import { createReviewSchema } from "@/models/schemas";
 const prisma = new PrismaClient();
 
 type Review = {

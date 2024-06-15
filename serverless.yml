@@ -5,8 +5,6 @@ provider:
   name: aws
   runtime: nodejs20.x
 
-# useDotenv: true
-
 functions:
   createUser:
     handler: src/endpoints/user/createUserHandler.handler
@@ -20,34 +18,32 @@ functions:
       - httpApi:
           path: /users/auth
           method: post
-    # environment:
-    #   JWT_SECRET: ${env:JWT_SECRET}
-  addWorkshop:
-    handler: src/workshop/addWorkshop.handler
+  createWorkshop:
+    handler: src/endpoints/workshop/createWorkshopHandler.handler
     events:
       - httpApi:
           path: /workshops/
           method: post
   getWorkshop:
-    handler: src/workshop/getWorkshop.handler
+    handler: src/endpoints/workshop/getWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: get
   listWorkshops:
-    handler: src/workshop/listWorkshops.handler
+    handler: src/endpoints/workshop/listWorkshops.handler
     events:
       - httpApi:
           path: /workshops/
           method: get
   updateWorkshop:
-    handler: src/workshop/updateWorkshop.handler
+    handler: src/endpoints/workshop/updateWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}
           method: put
   deleteWorkshop:
-    handler: src/workshop/deleteWorkshop.handler
+    handler: src/endpoints/workshop/deleteWorkshop.handler
     events:
       - httpApi:
           path: /workshops/{workshop_UUID}

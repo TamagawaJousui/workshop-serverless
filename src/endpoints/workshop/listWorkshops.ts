@@ -8,8 +8,7 @@ import createError from "http-errors";
 
 import type { Status } from "@/constants/constants";
 import { PARAMETER_OF_WORKSHOR_LIST_QUERY } from "@/constants/constants";
-
-import { listWorkshopDetailsSchema } from "../models/schemas";
+import { listWorkshopDetailsSchema } from "@/models/schemas";
 
 const prisma = new PrismaClient();
 

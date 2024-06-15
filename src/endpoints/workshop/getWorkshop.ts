@@ -9,9 +9,8 @@ import { PrismaClient } from "@prisma/client";
 import createError from "http-errors";
 
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
-
-import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "../constants/errorMessages";
-import { getWorkShopDetailSchema } from "../models/schemas";
+import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
+import { getWorkShopDetailSchema } from "@/models/schemas";
 
 const prisma = new PrismaClient();
 
