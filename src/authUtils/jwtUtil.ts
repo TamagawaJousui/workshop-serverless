@@ -14,8 +14,8 @@ const v4 = new RegExp(
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
 );
 
-export function isUuidv4(str: string) {
-  const lowercase = str.toLowerCase();
+export function isUuidV4(str: string) {
+  const lowercase = str?.toLowerCase();
   return v4.test(lowercase);
 }
 
@@ -46,7 +46,7 @@ export function isTokenPayload(token): token is TokenPayload {
     token?.sub &&
     token.iat &&
     token.exp &&
-    isUuidv4(token.sub) &&
+    isUuidV4(token.sub) &&
     Number.isInteger(token.iat) &&
     Number.isInteger(token.exp)
   );

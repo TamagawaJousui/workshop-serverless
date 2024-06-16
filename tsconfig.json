@@ -2,7 +2,9 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "@/userHandler/*":["./src/endpoints/user/*"]
+    },
+    "allowJs": true,
   },
 }
