@@ -1,5 +1,29 @@
+import { faker } from "@faker-js/faker";
+
+import { handler as createWorkShopHandler } from "@/endpoints/workshop/createWorkshopHandler";
+import { eventMock } from "@/tests/eventMock";
+import { mockedContext } from "@/tests/mockedContext";
+
+import { authRandomUser } from "./testUtils/authRandomUser";
+
 describe("create, get, update and delete workshop", () => {
-  test("create workshop, except success", async () => {});
+  test("create workshop, except success", async () => {
+    const jwtToken = await authRandomUser();
+    const workshopBody = {
+      start_at: faker.date.past().toISOString(),
+      end_at: faker.date.future().toISOString(),
+      participation_method: faker.vehicle.bicycle(),
+    };
+    console.log(jwtToken);
+
+    const workshop = await createWorkShopHandler(
+      eventMock(workshopBody, { Authorization: `Bearer ${jwtToken}` }),
+      mockedContext,
+    ).catch((err) => err);
+
+    expect(workshop.statusCode).toBe(200);
+    console.log(workshop.body);
+  });
   test("create workshop with wrong credential, except error", async () => {});
   test("create workshop with wrong request properties, except error", async () => {});
   test("get workshop , except success", async () => {});

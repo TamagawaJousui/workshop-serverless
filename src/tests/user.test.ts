@@ -10,24 +10,12 @@ import { handler as createUserHandler } from "@/userHandler/createUserHandler";
 
 import { eventMock } from "./eventMock";
 import { mockedContext } from "./mockedContext";
+import { createRandomUser } from "./testUtils/createRandomUser";
 
 describe("register and auth user", () => {
   test("register user, except success", async () => {
-    const [name, email, password] = [
-      faker.internet.userName(),
-      faker.internet.email(),
-      faker.internet.password(),
-    ];
-    const body = {
-      name,
-      email,
-      password,
-    };
-
-    const result = await createUserHandler(
-      eventMock(body),
-      mockedContext,
-    ).catch((err) => err);
+    const { parameter, result } = await createRandomUser();
+    const [name, email] = parameter;
 
     expect(result.statusCode).toBe(200);
     expect(result.headers).toEqual({ "Content-Type": "application/json" });

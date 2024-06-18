@@ -1,8 +1,8 @@
-export const eventMock = (body) => ({
+export const eventMock = (body, headers?) => ({
   body: JSON.stringify(body),
   path: "/users/auth",
   httpMethod: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", ...headers },
   multiValueHeaders: null,
   isBase64Encoded: false,
   pathParameters: null,
