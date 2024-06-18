@@ -70,7 +70,7 @@ functions:
     handler: src/endpoints/review/createReviewHandler.handler
     events:
       - httpApi:
-          path: /workshops/reviews/
+          path: /workshops/{workshop_UUID}/reviews/
           method: post
   processPoint:
     handler: src/endpoints/point/processPointHandler.handler

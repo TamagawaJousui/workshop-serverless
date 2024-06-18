@@ -1,3 +1,5 @@
+import type { UUID } from "node:crypto";
+
 import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
@@ -11,6 +13,7 @@ import jwtAuthMiddleware, {
 } from "middy-middleware-jwt-auth";
 
 import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
+import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import {
   API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
   PRISMA_ERROR_CODE,
@@ -21,9 +24,10 @@ import { createReview, type Review } from "@/services/db/review/createReview";
 
 export async function lambdaHandler(request) {
   const payload: Review = request.body;
+  const workshopUuid: UUID = request.pathParameters[PARAMETER_OF_WORKSHOP_UUID];
   const userUuid = request.auth.payload.sub;
 
-  const review = { ...payload, user_id: userUuid };
+  const review = { ...payload, user_id: userUuid, workshop_id: workshopUuid };
   const result = await createReview(review).catch((err) => {
     console.warn(err);
     return err;

@@ -134,18 +134,25 @@ export const createReviewSchema = {
   properties: {
     body: {
       type: "object",
-      required: ["workshop_id", "content"],
       properties: {
-        workshop_id: {
-          type: "string",
-          format: "uuid",
-        },
         content: {
           type: "string",
         },
       },
+      required: ["content"],
       additionalProperties: false,
     },
+    pathParameters: {
+      type: "object",
+      properties: {
+        [PARAMETER_OF_WORKSHOP_UUID]: {
+          type: "string",
+          format: "uuid",
+        },
+      },
+      additionalProperties: false,
+      required: [PARAMETER_OF_WORKSHOP_UUID],
+    },
   },
-  required: ["body"],
+  required: ["body", "pathParameters"],
 };
