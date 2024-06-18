@@ -1,5 +1,5 @@
 import { PARAMETER_OF_WORKSHOP_LIST_QUERY } from "@/constants/constants";
-import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { listWorkshopDetailsSchema } from "@/models/schemas";
 import { listWorkshops } from "@/services/db/workshop/listWorkshops";
 
@@ -15,7 +15,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyUnauthorized(
-  lambdaHandler,
-  listWorkshopDetailsSchema,
-);
+export const handler = middyWrapper({lambdaHandler, schema: listWorkshopDetailsSchema, parseBody : false, requireAuth: false});

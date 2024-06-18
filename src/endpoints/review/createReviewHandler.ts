@@ -9,7 +9,7 @@ import {
   PRISMA_ERROR_CODE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { createReviewSchema } from "@/models/schemas";
 import { createReview, type Review } from "@/services/db/review/createReview";
 
@@ -49,4 +49,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(lambdaHandler, createReviewSchema);
+export const handler = middyWrapper({lambdaHandler, schema: createReviewSchema, parseBody : true, requireAuth: true});

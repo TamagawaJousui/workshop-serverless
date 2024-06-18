@@ -10,7 +10,7 @@ import {
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
   WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { createParticipationSchema } from "@/models/schemas";
 import { createParticipation } from "@/services/db/participation/createParticipation";
 
@@ -53,7 +53,5 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(
-  lambdaHandler,
-  createParticipationSchema,
-);
+
+export const handler = middyWrapper({lambdaHandler, schema: createParticipationSchema, parseBody : false, requireAuth: true});

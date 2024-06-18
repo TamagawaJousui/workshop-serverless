@@ -2,7 +2,8 @@ import createError from "http-errors";
 
 import { USER_FORBIDDEN_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { adminEmail } from "@/env";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
+import { pointSchema } from "@/models/schemas";
 import { getUser } from "@/services/db/user/getUser";
 import { listPointReceivers } from "@/services/point/listPointReceivers";
 import { markPointProcessed } from "@/services/point/markPointProcessed";
@@ -27,4 +28,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(lambdaHandler);
+export const handler = middyWrapper({lambdaHandler, schema: pointSchema, parseBody : false, requireAuth: true});

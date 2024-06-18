@@ -5,7 +5,7 @@ import {
   API_KEY_AUTHENTICATION_FAILED_ERROR_MESSAGE,
   PRISMA_ERROR_CODE,
 } from "@/constants/errorMessages";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { addWorkshopSchema } from "@/models/schemas";
 import {
   createWorkShop,
@@ -42,4 +42,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(lambdaHandler, addWorkshopSchema);
+export const handler = middyWrapper({lambdaHandler, schema: addWorkshopSchema, parseBody : true, requireAuth: true});

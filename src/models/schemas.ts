@@ -156,3 +156,4 @@ export const createReviewSchema = {
   },
   required: ["body", "pathParameters"],
 };
+export const pointSchema = {};

@@ -8,7 +8,7 @@ import {
   PRISMA_ERROR_CODE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { updateWorkshopSchema } from "@/models/schemas";
 import {
   updateWorkshop,
@@ -25,6 +25,7 @@ export async function lambdaHandler(request) {
     id: workshopUuid,
     user_id: userUuid,
   };
+  console.log(workshop);
 
   const result = await updateWorkshop(workshop).catch((err) => {
     console.warn(err);
@@ -48,4 +49,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(lambdaHandler, updateWorkshopSchema);
+export const handler = middyWrapper({lambdaHandler, schema: updateWorkshopSchema, parseBody : true, requireAuth: true});

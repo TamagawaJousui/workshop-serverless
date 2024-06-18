@@ -4,7 +4,7 @@ import createError from "http-errors";
 
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
-import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { getWorkShopDetailSchema } from "@/models/schemas";
 import { getWorkShop } from "@/services/db/workshop/getWorkshop";
 
@@ -30,7 +30,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyUnauthorized(
-  lambdaHandler,
-  getWorkShopDetailSchema,
-);
+export const handler = middyWrapper({lambdaHandler, schema: getWorkShopDetailSchema, parseBody : false, requireAuth: false});

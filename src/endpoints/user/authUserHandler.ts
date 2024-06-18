@@ -2,7 +2,7 @@ import createError from "http-errors";
 
 import { signJwt } from "@/authUtils/jwtUtil";
 import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "@/constants/errorMessages";
-import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { authUserSchema } from "@/models/schemas";
 import { type Auth, signInUser } from "@/services/db/user/signInUser";
 
@@ -29,4 +29,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyUnauthorized(lambdaHandler, authUserSchema);
+export const handler = middyWrapper({lambdaHandler, schema: authUserSchema, parseBody : true, requireAuth: false});

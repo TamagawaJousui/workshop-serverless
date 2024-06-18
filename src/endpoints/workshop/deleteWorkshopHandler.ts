@@ -8,7 +8,7 @@ import {
   PRISMA_ERROR_CODE,
   WORKSHOP_NOT_EXISTS_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
-import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { deleteWorkShopDetailSchema } from "@/models/schemas";
 import { deleteWorkshop } from "@/services/db/workshop/deleteWorkshop";
 
@@ -38,7 +38,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyAuthorized(
-  lambdaHandler,
-  deleteWorkShopDetailSchema,
-);
+export const handler = middyWrapper({lambdaHandler, schema: deleteWorkShopDetailSchema, parseBody : false, requireAuth: true});

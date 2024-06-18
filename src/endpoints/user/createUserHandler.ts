@@ -5,7 +5,7 @@ import {
   PRISMA_ERROR_CODE,
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
-import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
+import { middyWrapper } from "@/middleware/middy/middyWrapper";
 import { addUserSchema } from "@/models/schemas";
 import { createUser, type User } from "@/services/db/user/createUser";
 
@@ -34,4 +34,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middyUnauthorized(lambdaHandler, addUserSchema);
+export const handler = middyWrapper({lambdaHandler, schema: addUserSchema, parseBody : true, requireAuth: false});
