@@ -1,12 +1,13 @@
 import { faker } from "@faker-js/faker";
 
 import { isUuidV4 } from "@/authUtils/jwtUtil";
-import { handler as createUserHandler } from "@/userHandler/createUserHandler";
-import { handler as authUserHandler } from "@/userHandler/authUserHandler";
 import {
   USER_AUTHENTICATION_FAILED_ERROR_MESSAGE,
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
+import { handler as authUserHandler } from "@/userHandler/authUserHandler";
+import { handler as createUserHandler } from "@/userHandler/createUserHandler";
+
 import { eventMock } from "./eventMock";
 import { mockedContext } from "./mockedContext";
 

@@ -17,6 +17,6 @@ export const WORKSHOP_NOT_EXISTS_ERROR_MESSAGE =
 export const WORKSHOP_PARTICIPANT_DUPLICATED_ERROR_MESSAGE =
   "ユーザーはすでにこの勉強会に参加登録済みです";
 export const WORKSHOP_PARTICIPANT_NOT_EXISTS_OR_CANCELED_ERROR_MESSAGE =
-  "ユーザーはすでにこの勉強会に参加していません、若しくはキャセル済みです";
+  "ユーザーはまだこの勉強会に参加していません、若しくはキャセルしていました";
 export const WORKSHOP_PARTICIPANT_RECORD_CORRUPTED_ERROR_MESSAGE =
   "ユーザーのこの勉強会の参加記録が破損しました";
