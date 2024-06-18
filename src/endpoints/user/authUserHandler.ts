@@ -1,12 +1,8 @@
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import jsonBodyParser from "@middy/http-json-body-parser";
-import validator from "@middy/validator";
-import { transpileSchema } from "@middy/validator/transpile";
 import createError from "http-errors";
 
 import { signJwt } from "@/authUtils/jwtUtil";
 import { USER_AUTHENTICATION_FAILED_ERROR_MESSAGE } from "@/constants/errorMessages";
+import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
 import { authUserSchema } from "@/models/schemas";
 import { type Auth, signInUser } from "@/services/db/user/signInUser";
 
@@ -33,8 +29,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middy()
-  .use(jsonBodyParser())
-  .use(validator({ eventSchema: transpileSchema(authUserSchema) }))
-  .use(httpErrorHandler())
-  .handler(lambdaHandler);
+export const handler = middyUnauthorized(lambdaHandler, authUserSchema);

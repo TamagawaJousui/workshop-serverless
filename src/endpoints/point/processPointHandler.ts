@@ -1,14 +1,8 @@
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import createError from "http-errors";
-import jwtAuthMiddleware, {
-  EncryptionAlgorithms,
-} from "middy-middleware-jwt-auth";
 
-import { isTokenPayload, secret } from "@/authUtils/jwtUtil";
 import { USER_FORBIDDEN_ERROR_MESSAGE } from "@/constants/errorMessages";
 import { adminEmail } from "@/env";
+import { middyAuthorized } from "@/middleware/middy/middyAuthorized";
 import { getUser } from "@/services/db/user/getUser";
 import { listPointReceivers } from "@/services/point/listPointReceivers";
 import { markPointProcessed } from "@/services/point/markPointProcessed";
@@ -33,15 +27,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middy()
-  .use(httpHeaderNormalizer())
-  .use(
-    jwtAuthMiddleware({
-      algorithm: EncryptionAlgorithms.HS256,
-      credentialsRequired: true,
-      isPayload: isTokenPayload,
-      secretOrPublicKey: secret,
-    }),
-  )
-  .use(httpErrorHandler())
-  .handler(lambdaHandler);
+export const handler = middyAuthorized(lambdaHandler);

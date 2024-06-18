@@ -1,8 +1,3 @@
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import jsonBodyParser from "@middy/http-json-body-parser";
-import validator from "@middy/validator";
-import { transpileSchema } from "@middy/validator/transpile";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import createError from "http-errors";
 
@@ -10,6 +5,7 @@ import {
   PRISMA_ERROR_CODE,
   USER_EMAIL_DUPLICATED_ERROR_MESSAGE,
 } from "@/constants/errorMessages";
+import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
 import { addUserSchema } from "@/models/schemas";
 import { createUser, type User } from "@/services/db/user/createUser";
 
@@ -38,8 +34,4 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middy()
-  .use(jsonBodyParser())
-  .use(validator({ eventSchema: transpileSchema(addUserSchema) }))
-  .use(httpErrorHandler())
-  .handler(lambdaHandler);
+export const handler = middyUnauthorized(lambdaHandler, addUserSchema);

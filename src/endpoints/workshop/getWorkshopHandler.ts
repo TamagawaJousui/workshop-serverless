@@ -1,13 +1,10 @@
 import type { UUID } from "node:crypto";
 
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import validator from "@middy/validator";
-import { transpileSchema } from "@middy/validator/transpile";
 import createError from "http-errors";
 
 import { PARAMETER_OF_WORKSHOP_UUID } from "@/constants/constants";
 import { WORKSHOP_NOT_EXISTS_ERROR_MESSAGE } from "@/constants/errorMessages";
+import { middyUnauthorized } from "@/middleware/middy/middyUnauthorized";
 import { getWorkShopDetailSchema } from "@/models/schemas";
 import { getWorkShop } from "@/services/db/workshop/getWorkshop";
 
@@ -33,7 +30,7 @@ export async function lambdaHandler(request) {
   };
 }
 
-export const handler = middy()
-  .use(validator({ eventSchema: transpileSchema(getWorkShopDetailSchema) }))
-  .use(httpErrorHandler())
-  .handler(lambdaHandler);
+export const handler = middyUnauthorized(
+  lambdaHandler,
+  getWorkShopDetailSchema,
+);
