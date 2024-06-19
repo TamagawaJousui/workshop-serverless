@@ -1,4 +1,4 @@
-service: serverless-typescript-starter
+service: workshop-serverless
 frameworkVersion: "3"
 
 provider:
@@ -6,49 +6,78 @@ provider:
   runtime: nodejs20.x
 
 functions:
-  hello:
-    handler: src/hello.handler
+  createUser:
+    handler: src/endpoints/user/createUserHandler.handler
     events:
-      - http:
-          path: /hello
-          method: get
-  userRegister:
-    handler: src/users/register.handler
-    events:
-      - http:
+      - httpApi:
           path: /users/register
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/user_register.json)}
-  userRuth:
-    handler: src/users/auth.handler
+  authUser:
+    handler: src/endpoints/user/authUserHandler.handler
     events:
-      - http:
+      - httpApi:
           path: /users/auth
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/user_logon.json)}
-  workshopCreate:
-    handler: src/workshops/create.handler
+  createWorkshop:
+    handler: src/endpoints/workshop/createWorkshopHandler.handler
     events:
-      - http:
+      - httpApi:
           path: /workshops/
           method: post
-          request:
-            schemas:
-              application/json: ${file(./src/models/workshop_create.json)}
-  workshopList:
-    handler: src/workshops/list.handler
+  getWorkshop:
+    handler: src/endpoints/workshop/getWorkshopHandler.handler
     events:
-      - http:
+      - httpApi:
+          path: /workshops/{workshop_UUID}
+          method: get
+  listWorkshops:
+    handler: src/endpoints/workshop/listWorkshopsHandler.handler
+    events:
+      - httpApi:
           path: /workshops/
           method: get
-          request:
-            parameters:
-              querystrings:
-                status: false
+  updateWorkshop:
+    handler: src/endpoints/workshop/updateWorkshopHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}
+          method: put
+  deleteWorkshop:
+    handler: src/endpoints/workshop/deleteWorkshopHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}
+          method: delete
+  createParticipation:
+    handler: src/endpoints/participation/createParticipationHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}/participants/
+          method: post
+  deleteParticipation:
+    handler: src/endpoints/participation/deleteParticipationHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}/participants/
+          method: delete
+  listParticipants:
+    handler: src/endpoints/participation/listParticipantsHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}/participants/
+          method: get
+  createReview:
+    handler: src/endpoints/review/createReviewHandler.handler
+    events:
+      - httpApi:
+          path: /workshops/{workshop_UUID}/reviews/
+          method: post
+  processPoint:
+    handler: src/endpoints/point/processPointHandler.handler
+    events:
+      - httpApi:
+          path: /point/
+          method: post
 
 plugins:
   - serverless-esbuild

@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "scheme.md"
+}
+
 model participations {
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id          String    @db.Uuid
@@ -29,18 +34,18 @@ model reviews {
 }
 
 model users {
-  id                          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                        String           @db.VarChar
-  email                       String           @unique @db.VarChar
-  hashed_password             String           @db.VarChar
-  hashed_temporary_api_key    String?          @db.VarChar
-  expired_at                  DateTime?        @db.Timestamp(6)
-  participations              participations[]
-  reviews                     reviews[]
+  id                       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String           @db.VarChar
+  email                    String           @unique @db.VarChar
+  hashed_password          String           @db.VarChar
+  participations           participations[]
+  reviews                  reviews[]
+  workshops                workshops[]
 }
 
 model workshops {
   id                       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                  String           @db.Uuid
   start_at                 DateTime         @db.Timestamp(6)
   end_at                   DateTime         @db.Timestamp(6)
   participation_method     String           @db.VarChar
@@ -51,4 +56,5 @@ model workshops {
   yumex_point_processed_at DateTime?        @db.Timestamp(6)
   participations           participations[]
   reviews                  reviews[]
+  users                    users            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
